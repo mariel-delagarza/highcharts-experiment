@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/*             THIS FILE WORKS TO SHOW EACH STATE (1:34PM 5/1/23)             */
+/*             THIS FILE WORKS TO SHOW EACH STATE (3:02PM 5/1/23)             */
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
@@ -71,22 +71,19 @@ Highcharts.data({
         rppRank: findStateRanking(stateName, rppRankings),
         uraniumRank: findStateRanking(stateName, uraniumRankings),
       };
+      let rankingValues = [
+        findStateRanking(stateName, coalRankings),
+        findStateRanking(stateName, crudeOilRankings),
+        findStateRanking(stateName, electricityRankings),
+        findStateRanking(stateName, fuelEthanolRankings),
+        findStateRanking(stateName, naturalGasRankings),
+        findStateRanking(stateName, rppRankings),
+        findStateRanking(stateName, uraniumRankings),
+      ];
 
       Object.assign(allData[i], rankings);
+      Object.assign((allData[i]["rankingValues"] = rankingValues));
     }
-
-    let testInfo = {
-      name: "Texas",
-      y: 91670,
-      data: [99, 15, 6, 3, 6, 3],
-      coalRank: 23,
-      crudeOilRank: 1,
-      electricityRank: 4,
-      fuelEthanolRank: 55,
-      naturalGasRank: 43,
-      rppRank: 2,
-      uraniumRank: 9,
-    };
 
     //If we pass the index of a state, that state's data will show in a chart
     console.log(allData[44]);
@@ -101,10 +98,14 @@ function renderChart(data) {
       type: "column",
     },
     title: {
-      text: "Monthly Average Rainfall",
+      text: data.name + " Commodity Exports to Canada 2020",
     },
     subtitle: {
-      text: "Source: WorldClimate.com",
+      text: "SUBTITLE GOES HERE",
+    },
+    credits: {
+      enabled: true,
+      text: "CSIS Energy Security Project",
     },
     xAxis: {
       categories: [
@@ -120,21 +121,63 @@ function renderChart(data) {
     },
     yAxis: {
       type: "logarithmic",
+      title: {
+        text: "US Dollars",
+      },
+      labels: {
+        formatter: function () {
+          if (this.value >= 1000000000) {
+            return "$" + this.value / 1000000000 + "B";
+          } else if (this.value >= 1000000) {
+            return "$" + this.value / 1000000 + "M";
+          } else if (this.value >= 1000) {
+            return "$" + this.value / 1000 + "K";
+          } else {
+            return "$" + this.value;
+          }
+        },
+      },
     },
     tooltip: {
+      headerFormat: '<span style="font-size:14px">{point.category}</span><br>',
       useHTML: true,
       borderColor: "#333",
       backgroundColor: "#fff",
       formatter: function () {
-        console.log(this.point);
+        let yFormatted;
+
+        if (this.point.y >= 1000000000) {
+          yFormatted =
+            "$" + parseFloat((this.point.y / 1000000000).toFixed(2)) + "B";
+        } else if (this.point.y >= 1000000) {
+          yFormatted =
+            "$" + parseFloat((this.point.y / 1000000).toFixed(2)) + "M";
+        } else if (this.point.y >= 1000) {
+          yFormatted = "$" + parseFloat((this.point.y / 1000).toFixed(2)) + "K";
+        } else {
+          yFormatted = "$" + this.point.y;
+        }
+
+        let index = this.point.index;
+        return `<b>${this.point.category}</b><br><br><span>Export Total: ${yFormatted}</span><br><span>Ranking: ${data.rankingValues[index]}</span>`;
       },
     },
     plotOptions: {
       column: {
         pointPadding: 0.2,
         borderWidth: 0,
+        colorByPoint: true,
       },
     },
+    colors: [
+      "#2caffe",
+      "#544fc5",
+      "#00e272",
+      "#fe6a35",
+      "#6b8abc",
+      "#d568fb",
+      "#2ee0ca",
+    ],
     series: [data],
   });
 }
