@@ -62,15 +62,7 @@ Highcharts.data({
     for (let i = 0; i < allData.length; i++) {
       let stateName = allData[i].name;
       stateNames.push(stateName);
-      let rankings = {
-        coalRank: findStateRanking(stateName, coalRankings),
-        crudeOilRank: findStateRanking(stateName, crudeOilRankings),
-        electricityRank: findStateRanking(stateName, electricityRankings),
-        fuelEthanolRank: findStateRanking(stateName, fuelEthanolRankings),
-        naturalGasRank: findStateRanking(stateName, naturalGasRankings),
-        rppRank: findStateRanking(stateName, rppRankings),
-        uraniumRank: findStateRanking(stateName, uraniumRankings),
-      };
+
       let rankingValues = [
         findStateRanking(stateName, coalRankings),
         findStateRanking(stateName, crudeOilRankings),
@@ -81,7 +73,6 @@ Highcharts.data({
         findStateRanking(stateName, uraniumRankings),
       ];
 
-      Object.assign(allData[i], rankings);
       Object.assign((allData[i]["rankingValues"] = rankingValues));
     }
 
@@ -106,6 +97,9 @@ function renderChart(data) {
     credits: {
       enabled: true,
       text: "CSIS Energy Security Project",
+    },
+    legend: {
+      enabled: false,
     },
     xAxis: {
       categories: [
