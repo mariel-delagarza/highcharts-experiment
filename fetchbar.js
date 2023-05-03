@@ -1,19 +1,32 @@
 /* -------------------------------------------------------------------------- */
-/*             THIS FILE WORKS TO SHOW EACH STATE (3:02PM 5/1/23)             */
-/* -------------------------------------------------------------------------- */
-
-/* -------------------------------------------------------------------------- */
 /*                             Set up data storage                            */
 /* -------------------------------------------------------------------------- */
-let allData = [];
-let stateNames = [];
-let coalRankings = [];
-let crudeOilRankings = [];
-let electricityRankings = [];
-let fuelEthanolRankings = [];
-let naturalGasRankings = [];
-let rppRankings = [];
-let uraniumRankings = [];
+let allDataExports = [];
+let stateRankings = {};
+
+let stateIndex = 44;
+/*
+need allDataExports and allDataImports 
+
+let stateRankings = {
+  exports: {
+
+  },
+  imports: {
+    
+  }
+}
+
+
+
+
+*/
+
+let testData = {
+  category: "coal",
+  name: "Coal",
+  data: [{ y: 91670, rank: 23 }],
+};
 
 /* -------------------------------------------------------------------------- */
 /*                          Parse data for highcharts                         */
@@ -25,6 +38,8 @@ Highcharts.data({
   switchRowsAndColumns: true,
   parsed: function parsed(columns) {
     let commodityList = columns[0].slice(2, 9);
+
+    /* ------------------------ Create allData object ---------------------- */
     for (let i = 1; i < columns.length; i++) {
       const row = columns[i];
 
@@ -33,57 +48,68 @@ Highcharts.data({
         data: row.slice(2, 9),
       };
 
-      allData.push(obj);
-    }
-    /* ------------------------ Rank States by Commodity ------------------------ */
-    const sortStatesByCommodity = (commodity) => {
-      let index = commodityList.findIndex((x) => x === commodity);
-      let allDataCopy = JSON.parse(JSON.stringify(allData));
-      let commodityRanking = allDataCopy.sort(
-        (a, b) => a.data[index] - b.data[index]
-      );
-
-      return commodityRanking.reverse();
-    };
-
-    coalRankings = sortStatesByCommodity("coal");
-    crudeOilRankings = sortStatesByCommodity("crudeOil");
-    electricityRankings = sortStatesByCommodity("electricity");
-    fuelEthanolRankings = sortStatesByCommodity("fuelEthanol");
-    naturalGasRankings = sortStatesByCommodity("naturalGas");
-    rppRankings = sortStatesByCommodity("rpp");
-    uraniumRankings = sortStatesByCommodity("uranium");
-
-    /* --------------------- find and assign state rankings --------------------- */
-    const findStateRanking = (stateName, commodityRanking) => {
-      return commodityRanking.findIndex((x) => x.name === stateName) + 1;
-    };
-
-    for (let i = 0; i < allData.length; i++) {
-      let stateName = allData[i].name;
-      stateNames.push(stateName);
-
-      let rankingValues = [
-        findStateRanking(stateName, coalRankings),
-        findStateRanking(stateName, crudeOilRankings),
-        findStateRanking(stateName, electricityRankings),
-        findStateRanking(stateName, fuelEthanolRankings),
-        findStateRanking(stateName, naturalGasRankings),
-        findStateRanking(stateName, rppRankings),
-        findStateRanking(stateName, uraniumRankings),
-      ];
-
-      Object.assign((allData[i]["rankingValues"] = rankingValues));
+      allDataExports.push(obj);
     }
 
+    /* --------------------Rank States by Commodity ----------------------- */
+
+    const sortStatesByCommodity = () => {
+      for (let i = 0; i < commodityList.length; i++) {
+        let allDataCopy = JSON.parse(JSON.stringify(allDataExports));
+        let rankingValues = allDataCopy.sort((a, b) => a.data[i] - b.data[i]);
+        let reverse = rankingValues.reverse();
+        Object.assign((stateRankings[commodityList[i]] = reverse));
+        allDataCopy = "";
+        rankingValues = "";
+        reverse = "";
+      }
+    };
+
+    console.log(stateRankings);
+
+    sortStatesByCommodity();
+    /* ------------------- find and assign state rankings ------------------- */
+
+    const findStateRanking = () => {
+      for (let i = 0; i < allDataExports.length; i++) {
+        let stateName = allDataExports[i].name;
+
+        // Add state's rank in each category to an array, add array to state
+        let rankingValues = [
+          stateRankings.coal.findIndex((x) => x.name === stateName) + 1,
+          stateRankings.crudeOil.findIndex((x) => x.name === stateName) + 1,
+          stateRankings.electricity.findIndex((x) => x.name === stateName) + 1,
+          stateRankings.fuelEthanol.findIndex((x) => x.name === stateName) + 1,
+          stateRankings.rpp.findIndex((x) => x.name === stateName) + 1,
+          stateRankings.uranium.findIndex((x) => x.name === stateName) + 1,
+        ];
+
+        Object.assign((allDataExports[i]["rankingValues"] = rankingValues));
+      }
+    };
+
+    findStateRanking();
+
+    /* ---------------------------- Render chart ---------------------------- */
     //If we pass the index of a state, that state's data will show in a chart
-    console.log(allData[44]);
-    renderChart(allData[44]);
+    /*
+      So event handler like bubbles,
+
+      on change, if select = imports, pass allDataExports[stateIndex]
+      if select = exports, pass allDataExports[stateIndex]
+
+
+      each category should be tied to a drilldown in the series 
+      https://www.highcharts.com/demo/column-drilldown 
+
+    */
+    //console.log(allDataExports[44]);
+    //console.log("allDataExports", allDataExports);
+    renderChart(allDataExports[stateIndex]);
   },
 });
 
 function renderChart(data) {
-  console.log(data.coalRank);
   Highcharts.chart("container", {
     chart: {
       type: "column",
@@ -139,6 +165,7 @@ function renderChart(data) {
       backgroundColor: "#fff",
       formatter: function () {
         let yFormatted;
+        console.log(this.point);
 
         if (this.point.y >= 1000000000) {
           yFormatted =
@@ -164,14 +191,41 @@ function renderChart(data) {
       },
     },
     colors: [
-      "#2caffe",
-      "#544fc5",
-      "#00e272",
-      "#fe6a35",
-      "#6b8abc",
-      "#d568fb",
-      "#2ee0ca",
+      "#001219",
+      "#005f73",
+      "#0a9396",
+      "#94d2bd",
+      "#fdbf45",
+      "#ee9b00",
+      "#ca6702",
     ],
     series: [data],
+    drilldown: {
+      breadcrumbs: {
+        position: {
+          align: "right",
+        },
+      },
+      series: [
+        /*
+        // data for each series should be top 10 states
+        // need to check if it includes the state being drilled down from
+        { name: "Coal", id: "coalExports", data: [] },
+        { name: "Crude Oil", id: "crudeOilExports", data: [] },
+        { name: "Electricity", id: "electricityExports", data: [] },
+        { name: "Fuel Ethanol", id: "fuelEthanolExports", data: [] },
+        { name: "Natural Gas", id: "naturalGasExports", data: [] },
+        { name: "RPP", id: "rppExports", data: [] },
+        { name: "Uranium", id: "uraniumExports", data: [] },
+        { name: "Coal", id: "coalImports", data: [] },
+        { name: "Crude Oil", id: "crudeOilImports", data: [] },
+        { name: "Electricity", id: "electricityImports", data: [] },
+        { name: "Fuel Ethanol", id: "fuelEthanolImports", data: [] },
+        { name: "Natural Gas", id: "naturalGasImports", data: [] },
+        { name: "RPP", id: "rppImports", data: [] },
+        { name: "Uranium", id: "uraniumImports", data: [] },
+    */ data,
+      ],
+    },
   });
 }
