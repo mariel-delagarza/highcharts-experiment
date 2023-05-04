@@ -94,405 +94,12 @@ let data = {
         y: 115057,
       },
     ],
-    rankingValues: [23, 1, 5, 7, 2, 19],
+    rankingValues: [23, 1, 5, 7, 5, 2, 19],
   },
-  importDrilldown: [
-    {
-      name: "Coal",
-      id: "coal",
-      data: [
-        {
-          name: "California",
-          y: 75971123,
-          color: "#6a041d",
-        },
-        {
-          name: "Indiana",
-          y: 58801555,
-          color: "#6a041d",
-        },
-        {
-          name: "Michigan",
-          y: 54596129,
-          color: "#6a041d",
-        },
-        {
-          name: "Ohio",
-          y: 44118627,
-          color: "#6a041d",
-        },
-        {
-          name: "Pennsylvania",
-          y: 43668662,
-          color: "#6a041d",
-        },
-        {
-          name: "Texas",
-          y: 29218687,
-          color: "#6a041d",
-        },
-        {
-          name: "New York",
-          y: 28436682,
-          color: "#6a041d",
-        },
-        {
-          name: "West Virginia",
-          y: 20516854,
-          color: "#6a041d",
-        },
-        {
-          name: "Florida",
-          y: 17762224,
-          color: "#6a041d",
-        },
-        {
-          name: "Kentucky",
-          y: 16994773,
-          color: "#6a041d",
-        },
-      ],
-    },
-    {
-      name: "Crude Oil",
-      id: "crudeOil",
-      data: [
-        {
-          name: "Illinois",
-          y: 19375441935,
-          color: "#6a041d",
-        },
-        {
-          name: "Texas",
-          y: 4282060548,
-          color: "#6a041d",
-        },
-        {
-          name: "Minnesota",
-          y: 3703580859,
-          color: "#6a041d",
-        },
-        {
-          name: "Oklahoma",
-          y: 3539158765,
-          color: "#6a041d",
-        },
-        {
-          name: "West Virginia",
-          y: 3448268712,
-          color: "#6a041d",
-        },
-        {
-          name: "Montana",
-          y: 2381597728,
-          color: "#6a041d",
-        },
-        {
-          name: "Missouri",
-          y: 2073583673,
-          color: "#6a041d",
-        },
-        {
-          name: "Michigan",
-          y: 1760785845,
-          color: "#6a041d",
-        },
-        {
-          name: "Colorado",
-          y: 1752307899,
-          color: "#6a041d",
-        },
-        {
-          name: "Louisiana",
-          y: 1370480886,
-          color: "#6a041d",
-        },
-      ],
-    },
-    {
-      name: "Electricity",
-      id: "electricity",
-      data: [
-        {
-          name: "Virginia",
-          y: 426738729,
-          color: "#6a041d",
-        },
-        {
-          name: "Minnesota",
-          y: 411526371,
-          color: "#6a041d",
-        },
-        {
-          name: "New York",
-          y: 340662476,
-          color: "#6a041d",
-        },
-        {
-          name: "California",
-          y: 338037136,
-          color: "#6a041d",
-        },
-        {
-          name: "Michigan",
-          y: 159521436,
-          color: "#6a041d",
-        },
-        {
-          name: "Maine",
-          y: 153011309,
-          color: "#6a041d",
-        },
-        {
-          name: "Arizona",
-          y: 47732394,
-          color: "#6a041d",
-        },
-        {
-          name: "West Virginia",
-          y: 46615281,
-          color: "#6a041d",
-        },
-        {
-          name: "New Hampshire",
-          y: 37946704,
-          color: "#6a041d",
-        },
-        {
-          name: "Oregon",
-          y: 18210902,
-          color: "#6a041d",
-        },
-      ],
-    },
-    {
-      name: "Fuel Ethanol",
-      id: "fuelEthanol",
-      data: [
-        {
-          name: "Louisiana",
-          y: 55692,
-          color: "#6a041d",
-        },
-        {
-          name: "Wyoming",
-          y: 0,
-          color: "#6a041d",
-        },
-        {
-          name: "Wisconsin",
-          y: 0,
-          color: "#6a041d",
-        },
-        {
-          name: "West Virginia",
-          y: 0,
-          color: "#6a041d",
-        },
-        {
-          name: "Washington",
-          y: 0,
-          color: "#6a041d",
-        },
-        {
-          name: "Virginia",
-          y: 0,
-          color: "#6a041d",
-        },
-        {
-          name: "Vermont",
-          y: 0,
-          color: "#6a041d",
-        },
-        {
-          name: "Utah",
-          y: 0,
-          color: "#6a041d",
-        },
-        {
-          name: "U.S. Virgin Islands",
-          y: 0,
-          color: "#6a041d",
-        },
-        {
-          name: "Texas",
-          y: 0,
-          color: "#6a041d",
-        },
-      ],
-    },
-    {
-      name: "Natural Gas",
-      id: "naturalGas",
-      data: [
-        {
-          name: "West Virginia",
-          y: 2519392096,
-          color: "#6a041d",
-        },
-        {
-          name: "Illinois",
-          y: 875350446,
-          color: "#6a041d",
-        },
-        {
-          name: "New York",
-          y: 672367026,
-          color: "#6a041d",
-        },
-        {
-          name: "Massachusetts",
-          y: 421972833,
-          color: "#6a041d",
-        },
-        {
-          name: "Minnesota",
-          y: 302584448,
-          color: "#6a041d",
-        },
-        {
-          name: "Michigan",
-          y: 289668342,
-          color: "#6a041d",
-        },
-        {
-          name: "Iowa",
-          y: 112389633,
-          color: "#6a041d",
-        },
-        {
-          name: "Montana",
-          y: 65586538,
-          color: "#6a041d",
-        },
-        {
-          name: "Virginia",
-          y: 39659249,
-          color: "#6a041d",
-        },
-        {
-          name: "Tennessee",
-          y: 12606788,
-          color: "#6a041d",
-        },
-      ],
-    },
-    {
-      name: "RPP",
-      id: "rpp",
-      data: [
-        {
-          name: "Massachusetts",
-          y: 1501875074,
-          color: "#6a041d",
-        },
-        {
-          name: "Maine",
-          y: 1450605351,
-          color: "#6a041d",
-        },
-        {
-          name: "Texas",
-          y: 876221045,
-          color: "#6a041d",
-        },
-        {
-          name: "Rhode Island",
-          y: 622666876,
-          color: "#6a041d",
-        },
-        {
-          name: "New Jersey",
-          y: 559748096,
-          color: "#6a041d",
-        },
-        {
-          name: "West Virginia",
-          y: 532117141,
-          color: "#6a041d",
-        },
-        {
-          name: "New York",
-          y: 509868543,
-          color: "#6a041d",
-        },
-        {
-          name: "New Hampshire",
-          y: 382713251,
-          color: "#6a041d",
-        },
-        {
-          name: "Michigan",
-          y: 327375260,
-          color: "#6a041d",
-        },
-        {
-          name: "Connecticut",
-          y: 303864591,
-          color: "#6a041d",
-        },
-      ],
-    },
-    {
-      name: "Uranium",
-      id: "uranium",
-      data: [
-        {
-          name: "California",
-          y: 48833965,
-          color: "#6a041d",
-        },
-        {
-          name: "Illinois",
-          y: 42873716,
-          color: "#6a041d",
-        },
-        {
-          name: "Florida",
-          y: 24578009,
-          color: "#6a041d",
-        },
-        {
-          name: "Tennessee",
-          y: 23310254,
-          color: "#6a041d",
-        },
-        {
-          name: "New York",
-          y: 21272555,
-          color: "#6a041d",
-        },
-        {
-          name: "Texas",
-          y: 18807432,
-          color: "#6a041d",
-        },
-        {
-          name: "New Jersey",
-          y: 18405332,
-          color: "#6a041d",
-        },
-        {
-          name: "North Carolina",
-          y: 18119727,
-          color: "#6a041d",
-        },
-        {
-          name: "Ohio",
-          y: 12682510,
-          color: "#6a041d",
-        },
-        {
-          name: "Georgia",
-          y: 10502377,
-          color: "#6a041d",
-        },
-      ],
-    },
-  ],
+  importDrilldown: [],
   exportDrilldown: [
     {
-      name: "Coal",
+      name: "coal",
       id: "coal",
       data: [
         {
@@ -545,6 +152,11 @@ let data = {
           y: 9824628,
           color: "#6a041d",
         },
+        {
+          name: "Texas",
+          y: 91670,
+          color: "#F5B841",
+        },
       ],
     },
     {
@@ -554,7 +166,7 @@ let data = {
         {
           name: "Texas",
           y: 5004637188,
-          color: "#6a041d",
+          color: "#F5B841",
         },
         {
           name: "North Dakota",
@@ -630,7 +242,7 @@ let data = {
         {
           name: "Texas",
           y: 2684743,
-          color: "#6a041d",
+          color: "#F5B841",
         },
         {
           name: "Oregon",
@@ -696,7 +308,7 @@ let data = {
         {
           name: "Texas",
           y: 10839699,
-          color: "#6a041d",
+          color: "#F5B841",
         },
         {
           name: "Maine",
@@ -742,7 +354,7 @@ let data = {
         {
           name: "Texas",
           y: 60001837,
-          color: "#6a041d",
+          color: "#F5B841",
         },
         {
           name: "Connecticut",
@@ -783,7 +395,7 @@ let data = {
         {
           name: "Texas",
           y: 1610172187,
-          color: "#6a041d",
+          color: "#F5B841",
         },
         {
           name: "Minnesota",
@@ -828,7 +440,7 @@ let data = {
       ],
     },
     {
-      name: "Uranium",
+      name: "uranium",
       id: "uranium",
       data: [
         {
@@ -881,28 +493,22 @@ let data = {
           y: 1078006,
           color: "#6a041d",
         },
+        {
+          name: "Texas",
+          y: 115057,
+          color: "#F5B841",
+        },
       ],
     },
   ],
 };
-
-const checkNumberOne = (stateName, drilldownSeries) => {
-  for (let i = 0; i < drilldownSeries.length; i++) {
-    //console.log(drilldownSeries[i].data[0].name);
-    if (stateName == drilldownSeries[i].data[0].name) {
-      drilldownSeries[i].data[0].color = "#F5B841";
-      console.log(drilldownSeries[i].data[0]);
-    }
-  }
-};
-checkNumberOne(data.name, data.exportDrilldown);
 
 Highcharts.chart("container", {
   chart: {
     type: "column",
   },
   title: {
-    text: " Commodity Exports to Canada 2020",
+    text: data.name + " Commodity Exports to Canada 2020",
   },
   subtitle: {
     text: "SUBTITLE GOES HERE",
@@ -955,21 +561,32 @@ Highcharts.chart("container", {
           return y;
         }
       };
+      let drilldownData = this.series.userOptions.data;
       let rankingValues = this.series.userOptions.rankingValues;
       let index = this.point.index;
       let isDrilldown = this.point.options.isDrilldown;
-      console.log(this.point.caExportToState);
 
       if (isDrilldown === "False") {
         let yFormatted = formatY(this.point.y);
         return `<b>${this.point.name}</b><br><br><span>Export Total: ${yFormatted}</span><br><span>Ranking: ${rankingValues[index]}</span>`;
       } else {
+        let drillDownID = this.series.userOptions.id;
+        console.log(drillDownID);
+        let drilldownIndex = data.exports.data.findIndex(
+          (x) => x.drilldown === drillDownID
+        );
+        console.log(drilldownIndex);
+        console.log(data.exports);
+        let ranking;
+
         let yFormatted = formatY(this.point.y);
-        return `<b>${
-          this.point.name
-        }</b><br><br><span>Export Total: ${yFormatted}</span><br><span>Ranking: ${
-          this.point.index + 1
-        }</span>`;
+
+        if (drilldownData[index].name == data.name) {
+          ranking = data.exports.rankingValues[drilldownIndex];
+        } else {
+          ranking = index + 1;
+        }
+        return `<b>${this.point.name}</b><br><br><span>Export Total: ${yFormatted}</span><br><span>Ranking: ${ranking}</span>`;
       }
     },
   },

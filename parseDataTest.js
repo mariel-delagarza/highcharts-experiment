@@ -1273,8 +1273,6 @@ sortStatesByCommodity();
 
 /* --------------------------- find state ranking --------------------------- */
 const findStateRanking = () => {
-  //console.log(allData[0].exports);
-
   for (let i = 0; i < allData.length; i++) {
     let stateName = allData[i].name;
 
@@ -1286,6 +1284,7 @@ const findStateRanking = () => {
         1,
       exportStateRankings.fuelEthanol.findIndex((x) => x.name === stateName) +
         1,
+      exportStateRankings.naturalGas.findIndex((x) => x.name === stateName) + 1,
       exportStateRankings.rpp.findIndex((x) => x.name === stateName) + 1,
       exportStateRankings.uranium.findIndex((x) => x.name === stateName) + 1,
     ];
@@ -1310,10 +1309,6 @@ findStateRanking();
 /* -------------------------------------------------------------------------- */
 /*                            figure out drilldown                            */
 /* -------------------------------------------------------------------------- */
-// I need the top 10 in each commodity, both exports and imports
-//console.log("top10coalexports");
-//console.log("exportstateRankings", exportStateRankings.coal.slice(0, 10));
-
 let exportDrilldownSeries = [];
 let importDrilldownSeries = [];
 let top10Exports = Object.entries(exportStateRankings)
@@ -1323,6 +1318,7 @@ let top10Imports = Object.entries(importStateRankings)
   .slice(0)
   .map((entry) => entry[1].slice(0, 10));
 
+/* -------------------------- make drillown series -------------------------- */
 const makeDrilldownSeries = () => {
   //exports
   for (let i = 0; i < top10Exports.length; i++) {
@@ -1367,14 +1363,65 @@ const makeDrilldownSeries = () => {
   }
 };
 makeDrilldownSeries();
-console.log("drilldownseries", exportDrilldownSeries);
-//console.log("allData", allData[0]);
 
+/* -------------------------------------------------------------------------- */
+/*                       add drilldown series to states                       */
+/* -------------------------------------------------------------------------- */
 const addDrilldownSeriesToAllData = () => {
+  let exportDrilldownSeriesCopy = JSON.parse(
+    JSON.stringify(exportDrilldownSeries)
+  );
+  console.log("exportDrilldownSeriesCopy", exportDrilldownSeriesCopy);
+
+  var obj = {};
+  // i -> go through each state
   for (let i = 0; i < allData.length; i++) {
-    Object.assign((allData[i].exportDrilldown = exportDrilldownSeries));
-    Object.assign((allData[i].importDrilldown = importDrilldownSeries));
+    // j -> go through each commodity
+    for (let j = 0; j < 7; j++) {
+      commodityList;
+      // grab the commodity y value for the state
+      obj = {
+        name: allData[i].name,
+        y: allData[i].exports.data[j].y,
+        color: "#F5B841",
+      };
+
+      // the array of the top10 states for that commodity
+      let top10 = structuredClone(exportDrilldownSeries[j].data);
+
+      // go through each value of the commodity array
+      for (let k = 0; k < top10.length; k++) {
+        // if that value is for the state you're on
+        if (top10[k].name == allData[i].name) {
+          top10[k].color = "#F5B841";
+        }
+      }
+
+      // if the array includes the state we're looking at
+      if (top10.some((value) => value.name == allData[i].name)) {
+        // add that array to the drilldown as is
+
+        let temp = {
+          name: commodityNames[j],
+          id: commodityList[j],
+          data: top10,
+        };
+
+        allData[i].exportDrilldown.push(temp);
+      } else {
+        let array = [...top10, obj];
+
+        let temp = {
+          name: commodityList[j],
+          id: commodityList[j],
+          data: array,
+        };
+
+        allData[i].exportDrilldown.push(temp);
+      }
+    }
   }
 };
 addDrilldownSeriesToAllData();
+
 console.log("all data", allData[44]);
