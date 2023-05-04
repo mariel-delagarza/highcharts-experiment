@@ -1104,6 +1104,7 @@ let exportDataToSort = [];
 let importDataToSort = [];
 
 function makeAllData(columns) {
+  console.log("parse columns", columns);
   for (let i = 1; i < columns.length; i++) {
     const row = columns[i];
     let stateName = row[0];
@@ -1307,7 +1308,7 @@ const findStateRanking = () => {
 findStateRanking();
 
 /* -------------------------------------------------------------------------- */
-/*                            figure out drilldown                            */
+/*                                  Drilldown                                 */
 /* -------------------------------------------------------------------------- */
 let exportDrilldownSeries = [];
 let importDrilldownSeries = [];

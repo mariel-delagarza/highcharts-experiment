@@ -1,7 +1,10 @@
 /* -------------------------------------------------------------------------- */
 /*                             Set up data storage                            */
 /* -------------------------------------------------------------------------- */
-let allDataExports = [];
+let allData = [];
+let exportDataToSort = [];
+let importDataToSort = [];
+
 let stateRankings = {};
 
 let stateIndex = 44;
@@ -37,6 +40,7 @@ Highcharts.data({
   googleSpreadsheetRange: "Commodity_Exports",
   switchRowsAndColumns: true,
   parsed: function parsed(columns) {
+    /* ------------------ make lists of commodity IDs, names ---------------- */
     let commodityColumns = columns[0].slice(2, 9);
     let commodityList = [];
     let commodityNames = [
@@ -54,11 +58,8 @@ Highcharts.data({
     console.log("parse - commodityList", commodityList);
 
     /* --------------------------- Make allData object -------------------------- */
-    let allData = [];
-    let exportDataToSort = [];
-    let importDataToSort = [];
-
     function makeAllData(columns) {
+      console.log("parse columns", columns);
       for (let i = 1; i < columns.length; i++) {
         const row = columns[i];
         let stateName = row[0];
@@ -192,7 +193,8 @@ Highcharts.data({
       }
     }
     makeAllData(columns);
-    /* ------------------------ Sort states by commodity ------------------------ */
+    console.log(allData);
+    /* ---------------------- Sort states by commodity ---------------------- */
     let sortData = [];
     let exportStateRankings = {};
     let importStateRankings = {};
@@ -226,7 +228,7 @@ Highcharts.data({
     };
     sortStatesByCommodity();
 
-    /* --------------------------- find state ranking --------------------------- */
+    /* ------------------------- find state ranking ------------------------- */
     const findStateRanking = () => {
       for (let i = 0; i < allData.length; i++) {
         let stateName = allData[i].name;
@@ -275,9 +277,9 @@ Highcharts.data({
     };
     findStateRanking();
 
-    /* -------------------------------------------------------------------------- */
-    /*                            figure out drilldown                            */
-    /* -------------------------------------------------------------------------- */
+    /* ---------------------------------------------------------------------- */
+    /*                                Drilldown                               */
+    /* ---------------------------------------------------------------------- */
     let exportDrilldownSeries = [];
     let importDrilldownSeries = [];
     let top10Exports = Object.entries(exportStateRankings)
@@ -286,8 +288,7 @@ Highcharts.data({
     let top10Imports = Object.entries(importStateRankings)
       .slice(0)
       .map((entry) => entry[1].slice(0, 10));
-
-    /* -------------------------- make drillown series -------------------------- */
+    /* ------------------------ make drillown series ------------------------ */
     const makeDrilldownSeries = () => {
       //exports
       for (let i = 0; i < top10Exports.length; i++) {
@@ -333,9 +334,7 @@ Highcharts.data({
     };
     makeDrilldownSeries();
 
-    /* -------------------------------------------------------------------------- */
-    /*                       add drilldown series to states                       */
-    /* -------------------------------------------------------------------------- */
+    /* ------------------- add drilldown series to states ------------------- */
     const addDrilldownSeriesToAllData = () => {
       let exportDrilldownSeriesCopy = JSON.parse(
         JSON.stringify(exportDrilldownSeries)
@@ -408,7 +407,8 @@ Highcharts.data({
     */
     //console.log(allDataExports[44]);
     //console.log("allDataExports", allDataExports);
-    renderChart(allDataExports[stateIndex]);
+    console.log(allData[44]);
+    renderChart(allData[stateIndex]);
   },
 });
 
@@ -431,16 +431,8 @@ function renderChart(data) {
       enabled: false,
     },
     xAxis: {
-      categories: [
-        "Coal",
-        "Crude Oil",
-        "Electricity",
-        "Fuel Ethanol",
-        "Natural Gas",
-        "RPP",
-        "Uranium",
-      ],
-      crosshair: true,
+      type: "category",
+      crosshair: false,
     },
     yAxis: {
       type: "logarithmic",
@@ -462,28 +454,53 @@ function renderChart(data) {
       },
     },
     tooltip: {
-      headerFormat: '<span style="font-size:14px">{point.category}</span><br>',
       useHTML: true,
       borderColor: "#333",
       backgroundColor: "#fff",
       formatter: function () {
-        let yFormatted;
-        console.log(this.point);
-
-        if (this.point.y >= 1000000000) {
-          yFormatted =
-            "$" + parseFloat((this.point.y / 1000000000).toFixed(2)) + "B";
-        } else if (this.point.y >= 1000000) {
-          yFormatted =
-            "$" + parseFloat((this.point.y / 1000000).toFixed(2)) + "M";
-        } else if (this.point.y >= 1000) {
-          yFormatted = "$" + parseFloat((this.point.y / 1000).toFixed(2)) + "K";
-        } else {
-          yFormatted = "$" + this.point.y;
-        }
-
+        const formatY = (yValue) => {
+          let y = "";
+          if (yValue >= 1000000000) {
+            y = "$" + parseFloat((yValue / 1000000000).toFixed(2)) + "B";
+            return y;
+          } else if (yValue >= 1000000) {
+            y = "$" + parseFloat((yValue / 1000000).toFixed(2)) + "M";
+            return y;
+          } else if (yValue >= 1000) {
+            y = "$" + parseFloat((yValue / 1000).toFixed(2)) + "K";
+            return y;
+          } else {
+            y = "$" + yValue;
+            return y;
+          }
+        };
+        let drilldownData = this.series.userOptions.data;
+        let rankingValues = this.series.userOptions.rankingValues;
         let index = this.point.index;
-        return `<b>${this.point.category}</b><br><br><span>Export Total: ${yFormatted}</span><br><span>Ranking: ${data.rankingValues[index]}</span>`;
+        let isDrilldown = this.point.options.isDrilldown;
+
+        if (isDrilldown === "False") {
+          let yFormatted = formatY(this.point.y);
+          return `<b>${this.point.name}</b><br><br><span>Export Total: ${yFormatted}</span><br><span>Ranking: ${rankingValues[index]}</span>`;
+        } else {
+          let drillDownID = this.series.userOptions.id;
+          console.log(drillDownID);
+          let drilldownIndex = data.exports.data.findIndex(
+            (x) => x.drilldown === drillDownID
+          );
+          console.log(drilldownIndex);
+          console.log(data.exports);
+          let ranking;
+
+          let yFormatted = formatY(this.point.y);
+
+          if (drilldownData[index].name == data.name) {
+            ranking = data.exports.rankingValues[drilldownIndex];
+          } else {
+            ranking = index + 1;
+          }
+          return `<b>${this.point.name}</b><br><br><span>Export Total: ${yFormatted}</span><br><span>Ranking: ${ranking}</span>`;
+        }
       },
     },
     plotOptions: {
@@ -502,22 +519,14 @@ function renderChart(data) {
       "#ee9b00",
       "#ca6702",
     ],
-    series: [data],
+    series: [data.exports],
     drilldown: {
       breadcrumbs: {
         position: {
-          align: "right",
+          align: "left",
         },
       },
-      series: [data.exports],
-      drilldown: {
-        breadcrumbs: {
-          position: {
-            align: "left",
-          },
-        },
-        series: data.exportDrilldown,
-      },
+      series: data.exportDrilldown,
     },
   });
 }
