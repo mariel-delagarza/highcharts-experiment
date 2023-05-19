@@ -9,7 +9,9 @@ let importDataToSort = [];
 let stateIndex = 44;
 
 /*
-TODO: Make a dropdown that switches between data.imports, data.importDrilldown
+select/dropdown needs to change
+- select imports or imports
+- it needs to switch between data.imports, data.importDrilldown
 and data.exports, data.exportDrilldown
 */
 
@@ -32,27 +34,24 @@ Highcharts.data({
   switchRowsAndColumns: true,
   parsed: function parsed(columns) {
     /* ------------------ make lists of commodity IDs, names ---------------- */
-    let commodityColumnHeadings = columns[0].slice(2, 9);
-    let commodityIds = [];
-    let commodityNames = [];
-    // go through each column heading with a commodity name
-    commodityColumnHeadings.forEach((element) => {
-      // add heading name as-is to IDs
-      commodityIds.push(element.slice(0, -7));
-
-      // process ID to get formatted name for Names list
-      let processedCommodity = element.slice(0, -7).split(/(?=[A-Z])/);
-      let word =
-        processedCommodity[0].charAt(0).toUpperCase() +
-        processedCommodity[0].slice(1);
-      processedCommodity[0] = word;
-
-      let final = processedCommodity.join(" ");
-      commodityNames.push(final);
+    let commodityColumns = columns[0].slice(2, 9);
+    let commodityList = [];
+    let commodityNames = [
+      "Coal",
+      "Crude Oil",
+      "Electricity",
+      "Fuel Ethanol",
+      "Natural Gas",
+      "RPP",
+      "Uranium",
+    ];
+    commodityColumns.forEach((element) => {
+      commodityList.push(element.slice(0, -7));
     });
 
+    console.log(commodityColumns);
+
     /* ------------------------- Make allData object ------------------------ */
-    // function also creates export and import lists to sort
     function makeAllData(columns) {
       for (let i = 1; i < columns.length; i++) {
         const row = columns[i];
@@ -72,21 +71,18 @@ Highcharts.data({
         let rppImports = row[14];
         let uraniumImports = row[15];
 
-        // create what we need to get export rankings later
         const obj1 = {
           name: stateName,
           data: row.slice(2, 9),
         };
         exportDataToSort.push(obj1);
 
-        // create what we need to get import rankings later
         const obj2 = {
           name: stateName,
           data: row.slice(9, 16),
         };
         importDataToSort.push(obj2);
 
-        // create item that goes in final allData list
         const obj3 = {
           name: stateName,
           imports: {
@@ -94,43 +90,43 @@ Highcharts.data({
             data: [
               {
                 name: "Coal",
-                drilldown: "Coal Imports",
+                drilldown: "coal",
                 isDrilldown: "False",
                 y: coalImports,
               },
               {
                 name: "Crude Oil",
-                drilldown: "Crude Oil Imports",
+                drilldown: "crudeOil",
                 isDrilldown: "False",
                 y: crudeOilImports,
               },
               {
                 name: "Electricity",
-                drilldown: "Electricity Imports",
+                drilldown: "electricity",
                 isDrilldown: "False",
                 y: electricityImports,
               },
               {
                 name: "Fuel Ethanol",
-                drilldown: "Fuel Ethanol Imports",
+                drilldown: "fuelEthanol",
                 isDrilldown: "False",
                 y: fuelEthanolImports,
               },
               {
                 name: "Natural Gas",
-                drilldown: "Natural Gas Imports",
+                drilldown: "naturalGas",
                 isDrilldown: "False",
                 y: naturalGasImports,
               },
               {
                 name: "RPP",
-                drilldown: "RPP Imports",
+                drilldown: "rpp",
                 isDrilldown: "False",
                 y: rppImports,
               },
               {
                 name: "Uranium",
-                drilldown: "Uranium Imports",
+                drilldown: "uranium",
                 isDrilldown: "False",
                 y: uraniumImports,
               },
@@ -190,20 +186,28 @@ Highcharts.data({
       }
     }
     makeAllData(columns);
+    console.log("allData", allData);
     /* ---------------------- Sort states by commodity ---------------------- */
     let exportStateRankings = {};
     let importStateRankings = {};
 
+    // iterate over list of commodities
+    // sort states in that commodity
     const sortStatesByCommodity = () => {
-      for (let i = 0; i < commodityIds.length; i++) {
+      for (let i = 0; i < commodityList.length; i++) {
         /* process exports*/
+
+        // need to make a copy with each trip through the loop
+        // so it's a fresh sort each time, otherwise we're just continously
+        // sorting the original and our data gets messed up
         let exportDataToSortCopy = JSON.parse(JSON.stringify(exportDataToSort));
         let exportRankingValues = exportDataToSortCopy.sort(
           (a, b) => a.data[i] - b.data[i]
         );
         let exportReverse = exportRankingValues.reverse();
-        Object.assign((exportStateRankings[commodityIds[i]] = exportReverse));
+        Object.assign((exportStateRankings[commodityList[i]] = exportReverse));
 
+        // reset to empty so the next loop starts clean
         exportDataToSortCopy = "";
         exportRankingValues = "";
         exportReverse = "";
@@ -214,7 +218,7 @@ Highcharts.data({
           (a, b) => a.data[i] - b.data[i]
         );
         let importReverse = importRankingValues.reverse();
-        Object.assign((importStateRankings[commodityIds[i]] = importReverse));
+        Object.assign((importStateRankings[commodityList[i]] = importReverse));
 
         importDataToSortCopy = "";
         exportRankingValues = "";
@@ -224,6 +228,7 @@ Highcharts.data({
     sortStatesByCommodity();
 
     /* ------------------------- find state ranking ------------------------- */
+    // build out an array of a state's ranking in each commodity
     const findStateRanking = () => {
       for (let i = 0; i < allData.length; i++) {
         let stateName = allData[i].name;
@@ -300,7 +305,7 @@ Highcharts.data({
 
         let obj = {
           name: commodityNames[i],
-          id: commodityIds[i],
+          id: commodityList[i],
           data: exportData,
         };
         exportDrilldownSeries.push(obj);
@@ -321,7 +326,7 @@ Highcharts.data({
 
         let obj = {
           name: commodityNames[i],
-          id: commodityIds[i],
+          id: commodityList[i],
           data: importData,
         };
         importDrilldownSeries.push(obj);
@@ -334,53 +339,92 @@ Highcharts.data({
       let exportDrilldownSeriesCopy = JSON.parse(
         JSON.stringify(exportDrilldownSeries)
       );
+      let importDrilldownSeriesCopy = JSON.parse(
+        JSON.stringify(importDrilldownSeries)
+      );
       console.log("exportDrilldownSeriesCopy", exportDrilldownSeriesCopy);
 
-      var obj = {};
+      var objExport = {};
+      var objImport = {};
       // i -> go through each state
       for (let i = 0; i < allData.length; i++) {
         // j -> go through each commodity
         for (let j = 0; j < 7; j++) {
-          commodityIds;
+          commodityList;
           // grab the commodity y value for the state
-          obj = {
+          objExport = {
             name: allData[i].name,
             y: allData[i].exports.data[j].y,
             color: "#F5B841",
           };
+          objImport = {
+            name: allData[i].name,
+            y: allData[i].imports.data[j].y,
+            color: "#F5B841",
+          };
 
           // the array of the top10 states for that commodity
-          let top10 = structuredClone(exportDrilldownSeries[j].data);
+          let top10Exports = structuredClone(exportDrilldownSeries[j].data);
+          let top10Imports = structuredClone(importDrilldownSeries[j].data);
 
           // go through each value of the commodity array
-          for (let k = 0; k < top10.length; k++) {
+          for (let k = 0; k < top10Exports.length; k++) {
             // if that value is for the state you're on
-            if (top10[k].name == allData[i].name) {
-              top10[k].color = "#F5B841";
+            if (top10Exports[k].name == allData[i].name) {
+              top10Exports[k].color = "#F5B841";
+            }
+          }
+
+          for (let k = 0; k < top10Imports.length; k++) {
+            // if that value is for the state you're on
+            if (top10Imports[k].name == allData[i].name) {
+              top10Imports[k].color = "#F5B841";
             }
           }
 
           // if the array includes the state we're looking at
-          if (top10.some((value) => value.name == allData[i].name)) {
+          if (top10Exports.some((value) => value.name == allData[i].name)) {
             // add that array to the drilldown as is
 
             let temp = {
               name: commodityNames[j],
-              id: commodityIds[j],
-              data: top10,
+              id: commodityList[j],
+              data: top10Exports,
             };
 
             allData[i].exportDrilldown.push(temp);
           } else {
-            let array = [...top10, obj];
+            let array = [...top10Exports, objExport];
 
             let temp = {
-              name: commodityNames[j],
-              id: commodityIds[j],
+              name: commodityList[j],
+              id: commodityList[j],
               data: array,
             };
 
             allData[i].exportDrilldown.push(temp);
+          }
+
+          if (top10Imports.some((value) => value.name == allData[i].name)) {
+            // add that array to the drilldown as is
+
+            let temp = {
+              name: commodityNames[j],
+              id: commodityList[j],
+              data: top10Imports,
+            };
+
+            allData[i].importDrilldown.push(temp);
+          } else {
+            let array = [...top10Imports, objImport];
+
+            let temp = {
+              name: commodityList[j],
+              id: commodityList[j],
+              data: array,
+            };
+
+            allData[i].importDrilldown.push(temp);
           }
         }
       }
@@ -388,8 +432,8 @@ Highcharts.data({
     addDrilldownSeriesToAllData();
 
     /* ---------------------------- Render chart ---------------------------- */
-    console.log(allData[44]);
-    renderChart(allData[44], "export", 2020);
+    console.log("Texas, all data", allData[44]);
+    renderChart(allData[44], "import", 2020);
   },
 });
 
