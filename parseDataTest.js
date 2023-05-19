@@ -16,8 +16,6 @@ const columns = [
     "naturalGasImports",
     "rppImports",
     "uraniumImports",
-    "caExportToState",
-    "caImportFromState",
   ],
   [
     "Alabama",
@@ -36,8 +34,6 @@ const columns = [
     0,
     21190290,
     3498725,
-    528926295,
-    5077454,
   ],
   [
     "Alaska",
@@ -56,8 +52,6 @@ const columns = [
     0,
     171165257,
     141567,
-    219858200,
-    56850253,
   ],
   [
     "Arizona",
@@ -76,8 +70,6 @@ const columns = [
     0,
     11564034,
     4411526,
-    90257931,
-    4981719,
   ],
   [
     "Arkansas",
@@ -96,8 +88,6 @@ const columns = [
     0,
     9597178,
     6202095,
-    24558905,
-    6897853,
   ],
   [
     "California",
@@ -116,8 +106,6 @@ const columns = [
     0,
     232618830,
     48833965,
-    1225022991,
-    280959559,
   ],
   [
     "Colorado",
@@ -136,8 +124,6 @@ const columns = [
     0,
     11187214,
     4240698,
-    2280331669,
-    2429088,
   ],
   [
     "Connecticut",
@@ -156,8 +142,6 @@ const columns = [
     0,
     303864591,
     1250909,
-    406270266,
-    102442578,
   ],
   [
     "Delaware",
@@ -176,8 +160,6 @@ const columns = [
     0,
     13499873,
     610750,
-    498668255,
-    43581457,
   ],
   [
     "District of Columbia",
@@ -196,8 +178,6 @@ const columns = [
     0,
     160848,
     2406116,
-    3285714,
-    257,
   ],
   [
     "Florida",
@@ -216,8 +196,6 @@ const columns = [
     0,
     180355138,
     24578009,
-    285050075,
-    18616697,
   ],
   [
     "Georgia",
@@ -236,29 +214,8 @@ const columns = [
     0,
     38472927,
     10502377,
-    77473846,
-    13409153,
   ],
-  [
-    "Hawaii",
-    11,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    45038,
-    0,
-    0,
-    0,
-    0,
-    34427873,
-    2337182,
-    47116919,
-    0,
-  ],
+  ["Hawaii", 11, 0, 0, 0, 0, 0, 0, 0, 45038, 0, 0, 0, 0, 34427873, 2337182],
   [
     "Idaho",
     12,
@@ -276,8 +233,6 @@ const columns = [
     0,
     162211127,
     1404554,
-    213635748,
-    2993032,
   ],
   [
     "Illinois",
@@ -296,8 +251,6 @@ const columns = [
     875350446,
     182057888,
     42873716,
-    26229739473,
-    1540855026,
   ],
   [
     "Indiana",
@@ -316,8 +269,6 @@ const columns = [
     0,
     77648251,
     4628823,
-    180608528,
-    193466587,
   ],
   [
     "Iowa",
@@ -336,8 +287,6 @@ const columns = [
     112389633,
     23842464,
     991519,
-    182828733,
-    159894761,
   ],
   [
     "Kansas",
@@ -356,8 +305,6 @@ const columns = [
     0,
     28056204,
     140599,
-    38995185,
-    81792356,
   ],
   [
     "Kentucky",
@@ -376,8 +323,6 @@ const columns = [
     0,
     44701694,
     4081515,
-    84195817,
-    71626077,
   ],
   [
     "Louisiana",
@@ -396,8 +341,6 @@ const columns = [
     0,
     111101464,
     10466182,
-    1912735054,
-    1103323226,
   ],
   [
     "Maine",
@@ -416,8 +359,6 @@ const columns = [
     0,
     1450605351,
     3341,
-    2059309773,
-    267914982,
   ],
   [
     "Maryland",
@@ -436,8 +377,6 @@ const columns = [
     0,
     79750088,
     3593683,
-    125789294,
-    5076773,
   ],
   [
     "Massachusetts",
@@ -456,8 +395,6 @@ const columns = [
     421972833,
     1501875074,
     5957830,
-    2481807339,
-    35517446,
   ],
   [
     "Michigan",
@@ -476,8 +413,6 @@ const columns = [
     289668342,
     327375260,
     6638656,
-    3326189655,
-    1079790105,
   ],
   [
     "Minnesota",
@@ -496,8 +431,6 @@ const columns = [
     302584448,
     151666414,
     5839178,
-    5868340444,
-    1663254190,
   ],
   [
     "Mississippi",
@@ -516,8 +449,6 @@ const columns = [
     0,
     6261082,
     1087576,
-    87374038,
-    21499528,
   ],
   [
     "Missouri",
@@ -536,8 +467,6 @@ const columns = [
     0,
     24850171,
     4709782,
-    2701573754,
-    125134799,
   ],
   [
     "Montana",
@@ -556,8 +485,6 @@ const columns = [
     65586538,
     59006159,
     472180,
-    3212779202,
-    52704986,
   ],
   [
     "Nebraska",
@@ -576,8 +503,6 @@ const columns = [
     0,
     28074226,
     6864850,
-    46619435,
-    245677083,
   ],
   [
     "Nevada",
@@ -596,8 +521,6 @@ const columns = [
     0,
     18599601,
     1593291,
-    40905367,
-    535302,
   ],
   [
     "New Hampshire",
@@ -616,8 +539,6 @@ const columns = [
     0,
     382713251,
     522500,
-    542382286,
-    18225807,
   ],
   [
     "New Jersey",
@@ -636,8 +557,6 @@ const columns = [
     0,
     559748096,
     18405332,
-    2147190206,
-    158569597,
   ],
   [
     "New Mexico",
@@ -656,8 +575,6 @@ const columns = [
     0,
     5098565,
     5563880,
-    18399551,
-    1171974,
   ],
   [
     "New York",
@@ -676,8 +593,6 @@ const columns = [
     672367026,
     509868543,
     21272555,
-    2045003000,
-    585391893,
   ],
   [
     "North Carolina",
@@ -696,8 +611,6 @@ const columns = [
     0,
     43121244,
     18119727,
-    96139442,
-    13672595,
   ],
   [
     "North Dakota",
@@ -716,8 +629,6 @@ const columns = [
     0,
     78466861,
     240565,
-    135083494,
-    4595619002,
   ],
   [
     "Ohio",
@@ -736,8 +647,6 @@ const columns = [
     0,
     103957255,
     12682510,
-    1103003673,
-    309481674,
   ],
   [
     "Oklahoma",
@@ -756,8 +665,6 @@ const columns = [
     0,
     16861401,
     323759,
-    4561268492,
-    58206032,
   ],
   [
     "Oregon",
@@ -776,8 +683,6 @@ const columns = [
     0,
     126484863,
     3691670,
-    395565696,
-    73192979,
   ],
   [
     "Pennsylvania",
@@ -796,8 +701,6 @@ const columns = [
     0,
     168099352,
     7389523,
-    1332001754,
-    506429100,
   ],
   [
     "Puerto Rico",
@@ -816,8 +719,6 @@ const columns = [
     0,
     178821724,
     2229787,
-    241194116,
-    38257,
   ],
   [
     "Rhode Island",
@@ -836,8 +737,6 @@ const columns = [
     0,
     622666876,
     265355,
-    798462431,
-    255917,
   ],
   [
     "South Carolina",
@@ -856,8 +755,6 @@ const columns = [
     0,
     68912944,
     9532127,
-    108988704,
-    3262107,
   ],
   [
     "South Dakota",
@@ -876,8 +773,6 @@ const columns = [
     0,
     4810771,
     2799950,
-    10705698,
-    68684297,
   ],
   [
     "Tennessee",
@@ -896,8 +791,6 @@ const columns = [
     12606788,
     26805049,
     23310254,
-    85247957,
-    14681426,
   ],
   [
     "Texas",
@@ -916,29 +809,8 @@ const columns = [
     0,
     876221045,
     18807432,
-    6664117772,
-    8561334246,
   ],
-  [
-    "U.S. Virgin Islands",
-    45,
-    0,
-    0,
-    0,
-    0,
-    0,
-    9273569,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    11870168,
-  ],
+  ["U.S. Virgin Islands", 45, 0, 0, 0, 0, 0, 9273569, 0, 0, 0, 0, 0, 0, 0, 0],
   [
     "Utah",
     46,
@@ -956,8 +828,6 @@ const columns = [
     0,
     2366,
     0,
-    9250,
-    87263,
   ],
   [
     "Vermont",
@@ -976,8 +846,6 @@ const columns = [
     0,
     74699879,
     5081022,
-    111848805,
-    24510351,
   ],
   [
     "Virginia",
@@ -996,8 +864,6 @@ const columns = [
     39659249,
     248915923,
     151213,
-    917806300,
-    195561,
   ],
   [
     "Washington",
@@ -1016,8 +882,6 @@ const columns = [
     0,
     8545111,
     4788407,
-    45358287,
-    26635262,
   ],
   [
     "West Virginia",
@@ -1036,8 +900,6 @@ const columns = [
     2519392096,
     532117141,
     6987410,
-    8414588792,
-    699759101,
   ],
   [
     "Wisconsin",
@@ -1056,8 +918,6 @@ const columns = [
     0,
     68699542,
     822116,
-    90190873,
-    291411875,
   ],
   [
     "Wyoming",
@@ -1076,27 +936,15 @@ const columns = [
     0,
     237342719,
     8907151,
-    331954375,
-    171970219,
   ],
 ];
 
-/*Make Commodity List*/
+/* --------------------------- Make commodity list -------------------------- */
 let commodityColumns = columns[0].slice(2, 9);
 let commodityList = [];
-let commodityNames = [
-  "Coal",
-  "Crude Oil",
-  "Electricity",
-  "Fuel Ethanol",
-  "Natural Gas",
-  "RPP",
-  "Uranium",
-];
 commodityColumns.forEach((element) => {
   commodityList.push(element.slice(0, -7));
 });
-console.log("parse - commodityList", commodityList);
 
 /* --------------------------- Make allData object -------------------------- */
 let allData = [];
@@ -1104,7 +952,6 @@ let exportDataToSort = [];
 let importDataToSort = [];
 
 function makeAllData(columns) {
-  console.log("parse columns", columns);
   for (let i = 1; i < columns.length; i++) {
     const row = columns[i];
     let stateName = row[0];
@@ -1123,18 +970,21 @@ function makeAllData(columns) {
     let rppImports = row[14];
     let uraniumImports = row[15];
 
+    /*need data in this shape to sort by commodity later*/
     const obj1 = {
       name: stateName,
       data: row.slice(2, 9),
     };
     exportDataToSort.push(obj1);
 
+    /*need data in this shape to sort by commodity later*/
     const obj2 = {
       name: stateName,
       data: row.slice(9, 16),
     };
     importDataToSort.push(obj2);
 
+    /*object of state's data, add to allData*/
     const obj3 = {
       name: stateName,
       imports: {
@@ -1142,43 +992,43 @@ function makeAllData(columns) {
         data: [
           {
             name: "Coal",
-            drilldown: "Coal Imports",
+            drilldown: commodityList[0],
             isDrilldown: "False",
             y: coalImports,
           },
           {
             name: "Crude Oil",
-            drilldown: "Crude Oil Imports",
+            drilldown: commodityList[1],
             isDrilldown: "False",
             y: crudeOilImports,
           },
           {
             name: "Electricity",
-            drilldown: "Electricity Imports",
+            drilldown: commodityList[2],
             isDrilldown: "False",
             y: electricityImports,
           },
           {
             name: "Fuel Ethanol",
-            drilldown: "Fuel Ethanol Imports",
+            drilldown: commodityList[3],
             isDrilldown: "False",
             y: fuelEthanolImports,
           },
           {
             name: "Natural Gas",
-            drilldown: "Natural Gas Imports",
+            drilldown: commodityList[4],
             isDrilldown: "False",
             y: naturalGasImports,
           },
           {
             name: "RPP",
-            drilldown: "RPP Imports",
+            drilldown: commodityList[5],
             isDrilldown: "False",
             y: rppImports,
           },
           {
             name: "Uranium",
-            drilldown: "Uranium Imports",
+            drilldown: commodityList[6],
             isDrilldown: "False",
             y: uraniumImports,
           },
@@ -1189,43 +1039,43 @@ function makeAllData(columns) {
         data: [
           {
             name: "Coal",
-            drilldown: "coal",
+            drilldown: commodityList[0],
             isDrilldown: "False",
             y: coalExports,
           },
           {
             name: "Crude Oil",
-            drilldown: "crudeOil",
+            drilldown: commodityList[1],
             isDrilldown: "False",
             y: crudeOilExports,
           },
           {
             name: "Electricity",
-            drilldown: "electricity",
+            drilldown: commodityList[2],
             isDrilldown: "False",
             y: electricityExports,
           },
           {
             name: "Fuel Ethanol",
-            drilldown: "fuelEthanol",
+            drilldown: commodityList[3],
             isDrilldown: "False",
             y: fuelEthanolExports,
           },
           {
             name: "Natural Gas",
-            drilldown: "naturalGas",
+            drilldown: commodityList[4],
             isDrilldown: "False",
             y: naturalGasExports,
           },
           {
             name: "RPP",
-            drilldown: "rpp",
+            drilldown: commodityList[5],
             isDrilldown: "False",
             y: rppExports,
           },
           {
             name: "Uranium",
-            drilldown: "uranium",
+            drilldown: commodityList[6],
             isDrilldown: "False",
             y: uraniumExports,
           },
@@ -1239,7 +1089,6 @@ function makeAllData(columns) {
 }
 makeAllData(columns);
 /* ------------------------ Sort states by commodity ------------------------ */
-let sortData = [];
 let exportStateRankings = {};
 let importStateRankings = {};
 
@@ -1335,7 +1184,7 @@ const makeDrilldownSeries = () => {
     }
 
     let obj = {
-      name: commodityNames[i],
+      name: allData[i].exports.data[i].name,
       id: commodityList[i],
       data: exportData,
     };
@@ -1356,7 +1205,7 @@ const makeDrilldownSeries = () => {
     }
 
     let obj = {
-      name: commodityNames[i],
+      name: allData[i].imports.data[i].name,
       id: commodityList[i],
       data: importData,
     };
@@ -1369,60 +1218,88 @@ makeDrilldownSeries();
 /*                       add drilldown series to states                       */
 /* -------------------------------------------------------------------------- */
 const addDrilldownSeriesToAllData = () => {
-  let exportDrilldownSeriesCopy = JSON.parse(
-    JSON.stringify(exportDrilldownSeries)
-  );
-  console.log("exportDrilldownSeriesCopy", exportDrilldownSeriesCopy);
-
-  var obj = {};
+  let exportObj = {};
+  let importObj = {};
   // i -> go through each state
   for (let i = 0; i < allData.length; i++) {
     // j -> go through each commodity
     for (let j = 0; j < 7; j++) {
-      commodityList;
       // grab the commodity y value for the state
-      obj = {
+      exportObj = {
         name: allData[i].name,
         y: allData[i].exports.data[j].y,
         color: "#F5B841",
       };
+      importObj = {
+        name: allData[i].name,
+        y: allData[i].imports.data[j].y,
+        color: "#F5B841",
+      };
 
       // the array of the top10 states for that commodity
-      let top10 = structuredClone(exportDrilldownSeries[j].data);
+      let exportTop10 = structuredClone(exportDrilldownSeries[j].data);
+      let importTop10 = structuredClone(importDrilldownSeries[j].data);
 
       // go through each value of the commodity array
-      for (let k = 0; k < top10.length; k++) {
+      for (let k = 0; k < exportTop10.length; k++) {
         // if that value is for the state you're on
-        if (top10[k].name == allData[i].name) {
-          top10[k].color = "#F5B841";
+        if (exportTop10[k].name == allData[i].name) {
+          exportTop10[k].color = "#F5B841";
+        }
+
+        if (importTop10[k].name == allData[i].name) {
+          importTop10[k].color = "#F5B841";
         }
       }
-
+      /* ----------------------------- exports ---------------------------- */
       // if the array includes the state we're looking at
-      if (top10.some((value) => value.name == allData[i].name)) {
+      if (exportTop10.some((value) => value.name == allData[i].name)) {
         // add that array to the drilldown as is
 
-        let temp = {
-          name: commodityNames[j],
+        let exportTemp = {
+          name: allData[i].exports.data[j].name,
           id: commodityList[j],
-          data: top10,
+          data: exportTop10,
         };
 
-        allData[i].exportDrilldown.push(temp);
+        allData[i].exportDrilldown.push(exportTemp);
       } else {
-        let array = [...top10, obj];
+        let array = [...exportTop10, exportObj];
 
-        let temp = {
-          name: commodityList[j],
+        let exportTemp = {
+          name: allData[i].exports.data[j].name,
           id: commodityList[j],
           data: array,
         };
 
-        allData[i].exportDrilldown.push(temp);
+        allData[i].exportDrilldown.push(exportTemp);
+      }
+
+      /* ----------------------------- imports ---------------------------- */
+      if (importTop10.some((value) => value.name == allData[i].name)) {
+        // add that array to the drilldown as is
+
+        let importTemp = {
+          name: allData[i].imports.data[j].name,
+          id: commodityList[j],
+          data: importTop10,
+        };
+
+        allData[i].importDrilldown.push(importTemp);
+      } else {
+        let array = [...importTop10, importObj];
+
+        let importTemp = {
+          name: allData[i].imports.data[j].name,
+          id: commodityList[j],
+          data: array,
+        };
+
+        allData[i].importDrilldown.push(importTemp);
       }
     }
   }
 };
 addDrilldownSeriesToAllData();
 
-console.log("all data", allData[44]);
+//console.log("all data", allData[44]);

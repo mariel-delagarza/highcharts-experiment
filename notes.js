@@ -2074,3 +2074,14 @@ let otherColuns = [
     8907151,
   ],
 ];
+
+const arrayRange = (start, stop, step) =>
+  Array.from(
+    { length: (stop - start) / step + 1 },
+    (value, index) => start + index * step
+  );
+
+let oneMillion = arrayRange(0, 1000000, 100000);
+let fiveBillion = arrayRange(1000000, 5000000000, 1000000);
+
+//console.log(fiveBillion);

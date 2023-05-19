@@ -5,8 +5,31 @@ let allData = [];
 let exportDataToSort = [];
 let importDataToSort = [];
 
+const arrayRange = (start, stop, step) =>
+  Array.from(
+    { length: (stop - start) / step + 1 },
+    (value, index) => start + index * step
+  );
+
+//console.log(arrayRange(0, 5000000000, 500000));
+
 // Texas data to test with
 let stateIndex = 44;
+
+function removeZeroes(arr) {
+  var i = arr.length;
+  while (i--) {
+    if (arr[i] === 0) {
+      arr.splice(i, 1);
+    }
+  }
+
+  arr.sort(function (a, b) {
+    return a - b;
+  });
+
+  return arr[1];
+}
 
 /*
 select/dropdown needs to change
@@ -92,6 +115,7 @@ Highcharts.data({
     function makeAllData(columns) {
       for (let i = 1; i < columns.length; i++) {
         const row = columns[i];
+        //console.log(row);
         let stateName = row[0];
         let coalExports = row[2];
         let crudeOilExports = row[3];
@@ -108,6 +132,13 @@ Highcharts.data({
         let rppImports = row[14];
         let uraniumImports = row[15];
 
+        // exports Array
+        let stateExportsArray = row.slice(2, 9);
+        //console.log("stateExportsArray", stateExportsArray);
+        // removeZeroes(stateExportsArray);
+        if (stateName == "Montana") {
+          console.log(removeZeroes(stateExportsArray));
+        }
         const obj1 = {
           name: stateName,
           data: row.slice(2, 9),
@@ -223,7 +254,7 @@ Highcharts.data({
       }
     }
     makeAllData(columns);
-    console.log(allData);
+    //console.log(allData[44]);
     /* ---------------------- Sort states by commodity ---------------------- */
     let sortData = [];
     let exportStateRankings = {};
@@ -369,7 +400,7 @@ Highcharts.data({
       let exportDrilldownSeriesCopy = JSON.parse(
         JSON.stringify(exportDrilldownSeries)
       );
-      console.log("exportDrilldownSeriesCopy", exportDrilldownSeriesCopy);
+      //console.log("exportDrilldownSeriesCopy", exportDrilldownSeriesCopy);
 
       var obj = {};
       // i -> go through each state
@@ -423,36 +454,60 @@ Highcharts.data({
     addDrilldownSeriesToAllData();
 
     /* ---------------------------- Render chart ---------------------------- */
-    console.log(allData[44]);
-    renderChart(allData[44], "export", 2020);
+    console.log(allData[27]);
+    renderChart(allData[26], "export", 2020, 0, 200000);
   },
 });
 
 //importExport must be capitalized Import or Export
-function renderChart(data, importExport, year) {
+function renderChart(data, importExport, year, extremeMin, extremeMax) {
   if (importExport == "import") {
     var title = data.name + " Commodity Imports from Canada " + year;
     var seriesData = data.imports;
     var seriesDrilldown = data.importDrilldown;
+    console.log(seriesData);
   } else {
     console.log("export");
     var title = data.name + " Commodity Exports Canada " + year;
     var seriesData = data.exports;
     var seriesDrilldown = data.exportDrilldown;
+    console.log(data);
   }
 
-  console.log(seriesData);
-
+  console.log(data);
   Highcharts.chart("container", {
     chart: {
-      type: "column",
+      type: "bar",
+      scrollablePlotArea: {
+        minWidth: 700,
+        scrollPositionX: 1,
+      },
+      zoomType: "y",
+      events: {
+        // load: function (event) {
+        //   this.yAxis[0].setExtremes(0, 153957);
+        // },
+        // redraw: function (event) {
+        //   this.yAxis[0].setExtremes(0, 200000);
+        // },
+        load() {
+          console.log("load");
+          this.yAxis[0].setExtremes(extremeMin, extremeMax);
+        },
+        redraw() {
+          console.log("redraw");
+          //this.yAxis[0].setExtremes(0, 153957);
+        },
+        render() {
+          //createLabel(this, "render event", 120, colors[1]);
+        },
+      },
     },
     title: {
       text: title,
       align: "left",
     },
     exporting: { enabled: false },
-
     subtitle: {
       text: "SUBTITLE GOES HERE",
       align: "left",
@@ -468,15 +523,16 @@ function renderChart(data, importExport, year) {
       type: "category",
       crosshair: false,
       lineColor: "#eeeeee",
+      labels: {
+        overflow: "justify",
+      },
     },
     yAxis: {
-      type: "logarithmic",
+      type: "linear",
       lineColor: "#eeeeee",
       title: {
         text: "US Dollars",
       },
-      lineWidth: 1,
-      //endOnTick: false,
       labels: {
         formatter: function () {
           if (this.value >= 1000000000) {
@@ -492,6 +548,7 @@ function renderChart(data, importExport, year) {
       },
     },
     tooltip: {
+      split: true,
       useHTML: true,
       borderColor: "#333",
       backgroundColor: "#fff",
@@ -542,9 +599,7 @@ function renderChart(data, importExport, year) {
       },
     },
     plotOptions: {
-      column: {
-        pointPadding: 0.2,
-        borderWidth: 0,
+      bar: {
         colorByPoint: true,
       },
     },
@@ -568,3 +623,9 @@ function renderChart(data, importExport, year) {
     },
   });
 }
+
+document.getElementById("reset").addEventListener("click", function () {
+  let chart = Highcharts.chart("container", {});
+  //chart.destroy();
+  renderChart(allData[26], "export", 2020, null, null);
+});
