@@ -546,7 +546,11 @@ function renderChart(data, importExport, year, extremeFlag) {
           for (let i = 0; i < exportTooltipData.length; i++) {
             let yFormatted = formatY(exportTooltipData[i].y);
             console.log(exportTooltipData[i].name, exportTooltipData[i].y);
-            output += `<tr><td><span style="color:${colors[i]}">\u25CF </span> ${exportTooltipData[i].name}: </td><td>${yFormatted}</td></tr><tr><td><span style="color:${colors[i]}">\u25CF </span> Rank: </td><td>${rankingValues[i]}</td></tr><tr><td colspan="2" style="border-bottom: 2px solid; border-bottom-color: #808080"></td></tr>`;
+            if (i == exportTooltipData.length - 1) {
+              output += `<tr><td><span style="color:${colors[i]}">\u25CF </span> ${exportTooltipData[i].name}: </td><td>${yFormatted}</td></tr><tr><td><span style="color:${colors[i]}">\u25CF </span> Rank: </td><td>${rankingValues[i]}</td></tr><tr><td colspan="2"></td></tr>`;
+            } else {
+              output += `<tr><td><span style="color:${colors[i]}">\u25CF </span> ${exportTooltipData[i].name}: </td><td>${yFormatted}</td></tr><tr><td><span style="color:${colors[i]}">\u25CF </span> Rank: </td><td>${rankingValues[i]}</td></tr><tr><td colspan="2" style="border-bottom: 2px solid; border-bottom-color: #808080"></td></tr>`;
+            }
           }
         } else {
           let drillDownID = this.series.userOptions.id;
