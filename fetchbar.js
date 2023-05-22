@@ -425,7 +425,7 @@ Highcharts.data({
     addDrilldownSeriesToAllData();
 
     /* ---------------------------- Render chart ---------------------------- */
-    renderChart(allData[26], "export", 2020, false);
+    renderChart(allData[44], "export", 2020, false);
   },
 });
 
@@ -594,5 +594,11 @@ function renderChart(data, importExport, year, extremeFlag) {
 document.getElementById("reset").addEventListener("click", function () {
   let chart = Highcharts.chart("container", {});
   chart.destroy();
-  renderChart(allData[26], "export", 2020, true);
+  renderChart(allData[44], "export", 2020, true);
+});
+
+document.getElementById("zoom").addEventListener("click", function () {
+  let chart = Highcharts.chart("container", {});
+  chart.destroy();
+  renderChart(allData[44], "export", 2020, false);
 });
