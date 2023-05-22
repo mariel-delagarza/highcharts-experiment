@@ -92,7 +92,7 @@ Highcharts.setOptions({
 Highcharts.data({
   googleAPIKey: "AIzaSyAImbihK2tiRewSFzuJTF_lcgPlGSr7zcg",
   googleSpreadsheetKey: "19uN6jYmrvuXwwrcOnwpTlQSJAEYP9gH6TQdq3Jn4z94",
-  googleSpreadsheetRange: "Commodity_Exports",
+  googleSpreadsheetRange: "Sheet1",
   switchRowsAndColumns: true,
   parsed: function parsed(columns) {
     /* ------------------ make lists of commodity IDs, names ---------------- */
@@ -490,16 +490,9 @@ function renderChart(data, importExport, year, extremeMin, extremeMax) {
         // redraw: function (event) {
         //   this.yAxis[0].setExtremes(0, 200000);
         // },
-        load() {
+        load: function (event) {
           console.log("load");
           this.yAxis[0].setExtremes(extremeMin, extremeMax);
-        },
-        redraw() {
-          console.log("redraw");
-          //this.yAxis[0].setExtremes(0, 153957);
-        },
-        render() {
-          //createLabel(this, "render event", 120, colors[1]);
         },
       },
     },

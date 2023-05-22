@@ -1,4 +1,10 @@
-let arr = [3488, 297, 0, 0, 0, 5911182, 1078006];
+let arr = [53957, 10, 10458780, 0, 0, 30663023, 0];
+
+const roundOffTo = (num, factor) => {
+  const quotient = num / 100000;
+  const res = Math.round(quotient) * factor;
+  return res;
+};
 
 function removeZeroes(arr) {
   var i = arr.length;
@@ -12,7 +18,13 @@ function removeZeroes(arr) {
     return a - b;
   });
 
-  return arr[1];
+  // add 100k to arr[1] in case it's small
+  let increasedMax = arr[1] + 100000;
+  console.log(increasedMax);
+
+  let roundedMax = roundOffTo(increasedMax, 100000);
+  console.log(roundedMax);
+  return roundedMax;
 }
 
 removeZeroes(arr);

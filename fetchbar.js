@@ -4,9 +4,33 @@
 let allData = [];
 let exportDataToSort = [];
 let importDataToSort = [];
+let extremeFlag;
 
 // Texas data to test with -- will need to set stateIndex with which state is being hovered over
 let stateIndex = 44;
+
+const roundOffTo = (num, factor) => {
+  const quotient = num / 100000;
+  const res = Math.round(quotient) * factor;
+  return res;
+};
+function setExtremeMax(arr) {
+  var i = arr.length;
+  while (i--) {
+    if (arr[i] === 0) {
+      arr.splice(i, 1);
+    }
+  }
+
+  arr.sort(function (a, b) {
+    return a - b;
+  });
+
+  // add 100k to arr[1] in case it's small
+  let increasedMax = arr[1] + 100000;
+  let roundedMax = roundOffTo(increasedMax, 100000);
+  return roundedMax;
+}
 
 /*
 TODO: Make a dropdown that switches between data.imports, data.importDrilldown
@@ -20,6 +44,15 @@ Highcharts.setOptions({
       fontFamily: "Source Sans Pro",
     },
   },
+  colors: [
+    "#001219",
+    "#005f73",
+    "#0a9396",
+    "#94d2bd",
+    "#fdbf45",
+    "#ee9b00",
+    "#ca6702",
+  ],
 });
 
 /* -------------------------------------------------------------------------- */
@@ -50,6 +83,8 @@ Highcharts.data({
       let final = processedCommodity.join(" ");
       commodityNames.push(final);
     });
+    let exportExtremeMax;
+    let importExtremeMax;
 
     /* ------------------------- Make allData object ------------------------ */
     // function also creates export and import lists to sort
@@ -72,6 +107,11 @@ Highcharts.data({
         let rppImports = row[14];
         let uraniumImports = row[15];
 
+        let stateExportsArray = row.slice(2, 9);
+        let stateImportsArray = row.slice(9, 16);
+        exportExtremeMax = setExtremeMax(stateExportsArray);
+        importExtremeMax = setExtremeMax(stateImportsArray);
+
         // create what we need to get export rankings later
         const obj1 = {
           name: stateName,
@@ -91,6 +131,7 @@ Highcharts.data({
           name: stateName,
           imports: {
             name: stateName,
+            extremeMax: importExtremeMax,
             data: [
               {
                 name: "Coal",
@@ -138,6 +179,7 @@ Highcharts.data({
           },
           exports: {
             name: stateName,
+            extremeMax: exportExtremeMax,
             data: [
               {
                 name: "Coal",
@@ -331,11 +373,6 @@ Highcharts.data({
 
     /* ------------------- add drilldown series to states ------------------- */
     const addDrilldownSeriesToAllData = () => {
-      let exportDrilldownSeriesCopy = JSON.parse(
-        JSON.stringify(exportDrilldownSeries)
-      );
-      console.log("exportDrilldownSeriesCopy", exportDrilldownSeriesCopy);
-
       var obj = {};
       // i -> go through each state
       for (let i = 0; i < allData.length; i++) {
@@ -388,36 +425,51 @@ Highcharts.data({
     addDrilldownSeriesToAllData();
 
     /* ---------------------------- Render chart ---------------------------- */
-    console.log(allData[44]);
-    renderChart(allData[44], "export", 2020);
+    renderChart(allData[26], "export", 2020, false);
   },
 });
 
 //importExport must be capitalized Import or Export
-function renderChart(data, importExport, year) {
+function renderChart(data, importExport, year, extremeFlag) {
+  console.log(data);
+  // set title text, get correct series data and drilldown
   if (importExport == "import") {
     var title = data.name + " Commodity Imports from Canada " + year;
     var seriesData = data.imports;
     var seriesDrilldown = data.importDrilldown;
   } else {
-    console.log("export");
     var title = data.name + " Commodity Exports Canada " + year;
     var seriesData = data.exports;
     var seriesDrilldown = data.exportDrilldown;
-  }
+    var exportTooltipData = data.exports.data;
+    console.log(data);
 
-  console.log(seriesData);
+    if (extremeFlag == false) {
+      var extremeMax = data.exports.extremeMax;
+    } else {
+      var extremeMax = null;
+    }
+  }
 
   Highcharts.chart("container", {
     chart: {
-      type: "column",
+      type: "bar",
+      scrollablePlotArea: {
+        minWidth: 700,
+        scrollPositionX: 1,
+      },
+      zoomType: "y",
+      events: {
+        load: function (event) {
+          this.yAxis[0].setExtremes(0, extremeMax);
+        },
+      },
     },
     title: {
       text: title,
       align: "left",
     },
     exporting: { enabled: false },
-
     subtitle: {
       text: "SUBTITLE GOES HERE",
       align: "left",
@@ -433,9 +485,12 @@ function renderChart(data, importExport, year) {
       type: "category",
       crosshair: false,
       lineColor: "#eeeeee",
+      labels: {
+        overflow: "justify",
+      },
     },
     yAxis: {
-      type: "logarithmic",
+      type: "linear",
       lineColor: "#eeeeee",
       title: {
         text: "US Dollars",
@@ -457,11 +512,16 @@ function renderChart(data, importExport, year) {
       },
     },
     tooltip: {
+      className: "myClass",
       useHTML: true,
       borderColor: "#333",
       backgroundColor: "#fff",
       formatter: function () {
+        let output = "";
+        let colors = Highcharts.defaultOptions.colors;
+
         const formatY = (yValue) => {
+          console.log(this.point.x);
           let y = "";
           if (yValue >= 1000000000) {
             y = "$" + parseFloat((yValue / 1000000000).toFixed(2)) + "B";
@@ -483,8 +543,11 @@ function renderChart(data, importExport, year) {
         let isDrilldown = this.point.options.isDrilldown;
 
         if (isDrilldown === "False") {
-          let yFormatted = formatY(this.point.y);
-          return `<b>${this.point.name}</b><br><br><span>${importExport} Total: ${yFormatted}</span><br><span>Ranking: ${rankingValues[index]}</span>`;
+          for (let i = 0; i < exportTooltipData.length; i++) {
+            let yFormatted = formatY(exportTooltipData[i].y);
+            console.log(exportTooltipData[i].name, exportTooltipData[i].y);
+            output += `<tr><td><span style="color:${colors[i]}">\u25CF </span> ${exportTooltipData[i].name}: </td><td>${yFormatted}</td></tr><tr><td><span style="color:${colors[i]}">\u25CF </span> Rank: </td><td>${rankingValues[i]}</td></tr><tr><td colspan="2" style="border-bottom: 2px solid; border-bottom-color: #808080"></td></tr>`;
+          }
         } else {
           let drillDownID = this.series.userOptions.id;
           console.log(drillDownID);
@@ -504,24 +567,18 @@ function renderChart(data, importExport, year) {
           }
           return `<b>${this.point.name}</b><br><br><span>Export Total: ${yFormatted}</span><br><span>Ranking: ${ranking}</span>`;
         }
+
+        /////////////////////////////
+        console.log(exportTooltipData);
+
+        return `<table>${output}</table>`;
       },
     },
     plotOptions: {
-      column: {
-        pointPadding: 0.2,
-        borderWidth: 0,
+      bar: {
         colorByPoint: true,
       },
     },
-    colors: [
-      "#001219",
-      "#005f73",
-      "#0a9396",
-      "#94d2bd",
-      "#fdbf45",
-      "#ee9b00",
-      "#ca6702",
-    ],
     series: [seriesData],
     drilldown: {
       breadcrumbs: {
@@ -533,3 +590,9 @@ function renderChart(data, importExport, year) {
     },
   });
 }
+
+document.getElementById("reset").addEventListener("click", function () {
+  let chart = Highcharts.chart("container", {});
+  chart.destroy();
+  renderChart(allData[26], "export", 2020, true);
+});
