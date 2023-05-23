@@ -437,6 +437,12 @@ function renderChart(data, importExport, year, extremeFlag) {
     var title = data.name + " Commodity Imports from Canada " + year;
     var seriesData = data.imports;
     var seriesDrilldown = data.importDrilldown;
+
+    if (extremeFlag == false) {
+      var extremeMax = data.imports.extremeMax;
+    } else {
+      var extremeMax = null;
+    }
   } else {
     var title = data.name + " Commodity Exports Canada " + year;
     var seriesData = data.exports;
@@ -572,9 +578,6 @@ function renderChart(data, importExport, year, extremeFlag) {
           return `<b>${this.point.name}</b><br><br><span>Export Total: ${yFormatted}</span><br><span>Ranking: ${ranking}</span>`;
         }
 
-        /////////////////////////////
-        console.log(exportTooltipData);
-
         return `<table>${output}</table>`;
       },
     },
@@ -605,4 +608,11 @@ document.getElementById("zoom").addEventListener("click", function () {
   let chart = Highcharts.chart("container", {});
   chart.destroy();
   renderChart(allData[44], "export", 2020, false);
+});
+
+const select = document.getElementById("dropdown");
+select.addEventListener("change", function () {
+  let chart = Highcharts.chart("container", {});
+  chart.destroy();
+  renderChart(allData[44], this.value, 2020, false);
 });
