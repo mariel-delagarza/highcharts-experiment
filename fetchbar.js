@@ -437,6 +437,7 @@ function renderChart(data, importExport, year, extremeFlag) {
     var title = data.name + " Commodity Imports from Canada " + year;
     var seriesData = data.imports;
     var seriesDrilldown = data.importDrilldown;
+    var importTooltipData = data.imports.data
 
     if (extremeFlag == false) {
       var extremeMax = data.imports.extremeMax;
