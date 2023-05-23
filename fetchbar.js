@@ -5,17 +5,14 @@ import * as helpers from "./modules/cat.js";
 let allData = [];
 let exportDataToSort = [];
 let importDataToSort = [];
-let extremeFlag;
+let exportImport = "export";
+let year = 2020;
 
 helpers.meow();
 
-// Texas data to test with -- will need to set stateIndex with which state is being hovered over
+/******STATE INDEX needs to come from map/state we're hovering over******/
 let stateIndex = 44;
-
-/*
-TODO: Make a dropdown that switches between data.imports, data.importDrilldown
-and data.exports, data.exportDrilldown
-*/
+/***********************************************************************/
 
 // font to make it look like Flourish
 Highcharts.setOptions({
@@ -46,23 +43,8 @@ Highcharts.data({
   parsed: function parsed(columns) {
     /* ------------------ make lists of commodity IDs, names ---------------- */
     let commodityColumnHeadings = columns[0].slice(2, 9);
-    let commodityIds = [];
-    let commodityNames = [];
-    // go through each column heading with a commodity name
-    commodityColumnHeadings.forEach((element) => {
-      // add heading name as-is to IDs
-      commodityIds.push(element.slice(0, -7));
-
-      // process ID to get formatted name for Names list
-      let processedCommodity = element.slice(0, -7).split(/(?=[A-Z])/);
-      let word =
-        processedCommodity[0].charAt(0).toUpperCase() +
-        processedCommodity[0].slice(1);
-      processedCommodity[0] = word;
-
-      let final = processedCommodity.join(" ");
-      commodityNames.push(final);
-    });
+    let commodityIds = helpers.makeCommodityIds(commodityColumnHeadings);
+    let commodityNames = helpers.makeCommodityNames(commodityColumnHeadings);
     let exportExtremeMax;
     let importExtremeMax;
 
@@ -159,8 +141,6 @@ Highcharts.data({
     /* ---------------------------------------------------------------------- */
     /*                                Drilldown                               */
     /* ---------------------------------------------------------------------- */
-    let exportDrilldownSeries = [];
-    let importDrilldownSeries = [];
     let top10Exports = Object.entries(exportStateRankings)
       .slice(0)
       .map((entry) => entry[1].slice(0, 10));
@@ -168,106 +148,35 @@ Highcharts.data({
       .slice(0)
       .map((entry) => entry[1].slice(0, 10));
     /* ------------------------ make drillown series ------------------------ */
-    const makeDrilldownSeries = () => {
-      //exports
-      for (let i = 0; i < top10Exports.length; i++) {
-        let exportData = [];
+    let exportDrilldownSeries = helpers.makeExportDrilldownSeries(
+      top10Exports,
+      commodityNames,
+      commodityIds
+    );
 
-        for (let j = 0; j < top10Exports[i].length; j++) {
-          let obj2 = {
-            name: top10Exports[i][j].name,
-            y: top10Exports[i][j].data[i],
-            color: "#6a041d",
-          };
-          exportData.push(obj2);
-        }
-
-        let obj = {
-          name: commodityNames[i],
-          id: commodityIds[i],
-          data: exportData,
-        };
-        exportDrilldownSeries.push(obj);
-      }
-
-      // imports
-      for (let i = 0; i < top10Imports.length; i++) {
-        let importData = [];
-
-        for (let j = 0; j < top10Imports[i].length; j++) {
-          let obj2 = {
-            name: top10Imports[i][j].name,
-            y: top10Imports[i][j].data[i],
-            color: "#6a041d",
-          };
-          importData.push(obj2);
-        }
-
-        let obj = {
-          name: commodityNames[i],
-          id: commodityIds[i],
-          data: importData,
-        };
-        importDrilldownSeries.push(obj);
-      }
-    };
-    makeDrilldownSeries();
+    let importDrilldownSeries = helpers.makeImportDrilldownSeries(
+      top10Imports,
+      commodityNames,
+      commodityIds
+    );
 
     /* ------------------- add drilldown series to states ------------------- */
-    const addDrilldownSeriesToAllData = () => {
-      var obj = {};
-      // i -> go through each state
-      for (let i = 0; i < allData.length; i++) {
-        // j -> go through each commodity
-        for (let j = 0; j < 7; j++) {
-          commodityIds;
-          // grab the commodity y value for the state
-          obj = {
-            name: allData[i].name,
-            y: allData[i].exports.data[j].y,
-            color: "#F5B841",
-          };
+    helpers.addExportDrilldownSeriesToAllData(
+      allData,
+      commodityIds,
+      commodityNames,
+      exportDrilldownSeries
+    );
 
-          // the array of the top10 states for that commodity
-          let top10 = structuredClone(exportDrilldownSeries[j].data);
-
-          // go through each value of the commodity array
-          for (let k = 0; k < top10.length; k++) {
-            // if that value is for the state you're on
-            if (top10[k].name == allData[i].name) {
-              top10[k].color = "#F5B841";
-            }
-          }
-
-          // if the array includes the state we're looking at
-          if (top10.some((value) => value.name == allData[i].name)) {
-            // add that array to the drilldown as is
-
-            let temp = {
-              name: commodityNames[j],
-              id: commodityIds[j],
-              data: top10,
-            };
-
-            allData[i].exportDrilldown.push(temp);
-          } else {
-            let array = [...top10, obj];
-
-            let temp = {
-              name: commodityNames[j],
-              id: commodityIds[j],
-              data: array,
-            };
-
-            allData[i].exportDrilldown.push(temp);
-          }
-        }
-      }
-    };
-    addDrilldownSeriesToAllData();
-
+    helpers.addImportDrilldownSeriesToAllData(
+      allData,
+      commodityIds,
+      commodityNames,
+      importDrilldownSeries
+    );
     /* ---------------------------- Render chart ---------------------------- */
-    renderChart(allData[44], "export", 2020, false);
+    // going to default to starting with export data for now
+    renderChart(allData[stateIndex], exportImport, year, false);
   },
 });
 
@@ -291,7 +200,6 @@ function renderChart(data, importExport, year, extremeFlag) {
     var seriesData = data.exports;
     var seriesDrilldown = data.exportDrilldown;
     var exportTooltipData = data.exports.data;
-    console.log(data);
 
     if (extremeFlag == false) {
       var extremeMax = data.exports.extremeMax;
@@ -444,18 +352,19 @@ function renderChart(data, importExport, year, extremeFlag) {
 document.getElementById("reset").addEventListener("click", function () {
   let chart = Highcharts.chart("container", {});
   chart.destroy();
-  renderChart(allData[44], "export", 2020, true);
+  renderChart(allData[44], exportImport, year, true);
 });
 
 document.getElementById("zoom").addEventListener("click", function () {
   let chart = Highcharts.chart("container", {});
   chart.destroy();
-  renderChart(allData[44], "export", 2020, false);
+  renderChart(allData[44], exportImport, year, false);
 });
 
 const select = document.getElementById("dropdown");
 select.addEventListener("change", function () {
   let chart = Highcharts.chart("container", {});
+  exportImport = this.value;
   chart.destroy();
-  renderChart(allData[44], this.value, 2020, false);
+  renderChart(allData[44], exportImport, year, false);
 });

@@ -3,6 +3,38 @@ export const meow = () => {
 };
 
 /* -------------------------------------------------------------------------- */
+/*                              make commodityIds                             */
+/* -------------------------------------------------------------------------- */
+export const makeCommodityIds = (commodityColumnHeadings) => {
+  let commodityIds = [];
+
+  commodityColumnHeadings.forEach((element) => {
+    // add heading name as-is to IDs
+    commodityIds.push(element.slice(0, -7));
+  });
+
+  return commodityIds;
+};
+
+export const makeCommodityNames = (commodityColumnHeadings) => {
+  let commodityNames = [];
+
+  commodityColumnHeadings.forEach((element) => {
+    // process ID to get formatted name for Names list
+    let processedCommodity = element.slice(0, -7).split(/(?=[A-Z])/);
+    let word =
+      processedCommodity[0].charAt(0).toUpperCase() +
+      processedCommodity[0].slice(1);
+    processedCommodity[0] = word;
+
+    let final = processedCommodity.join(" ");
+    commodityNames.push(final);
+  });
+
+  return commodityNames;
+};
+
+/* -------------------------------------------------------------------------- */
 /*                        find setExtremes max for zoom                       */
 /* -------------------------------------------------------------------------- */
 const roundOffTo = (num, factor) => {
@@ -215,3 +247,179 @@ export const makeImportRankingvalues = (importStateRankings, stateName) => {
 /* -------------------------------------------------------------------------- */
 /*                            make drilldown series                           */
 /* -------------------------------------------------------------------------- */
+
+export const makeExportDrilldownSeries = (
+  top10Exports,
+  commodityNames,
+  commodityIds
+) => {
+  let exportDrilldownSeries = [];
+
+  for (let i = 0; i < top10Exports.length; i++) {
+    let exportData = [];
+
+    for (let j = 0; j < top10Exports[i].length; j++) {
+      let obj2 = {
+        name: top10Exports[i][j].name,
+        y: top10Exports[i][j].data[i],
+        color: "#6a041d",
+      };
+      exportData.push(obj2);
+    }
+
+    let obj = {
+      name: commodityNames[i],
+      id: commodityIds[i],
+      data: exportData,
+    };
+    exportDrilldownSeries.push(obj);
+  }
+
+  return exportDrilldownSeries;
+};
+
+export const makeImportDrilldownSeries = (
+  top10Imports,
+  commodityNames,
+  commodityIds
+) => {
+  let importDrilldownSeries = [];
+
+  for (let i = 0; i < top10Imports.length; i++) {
+    let importData = [];
+
+    for (let j = 0; j < top10Imports[i].length; j++) {
+      let obj2 = {
+        name: top10Imports[i][j].name,
+        y: top10Imports[i][j].data[i],
+        color: "#6a041d",
+      };
+      importData.push(obj2);
+    }
+
+    let obj = {
+      name: commodityNames[i],
+      id: commodityIds[i],
+      data: importData,
+    };
+    importDrilldownSeries.push(obj);
+  }
+
+  return importDrilldownSeries;
+};
+
+export const addExportDrilldownSeriesToAllData = (
+  allData,
+  commodityIds,
+  commodityNames,
+  exportDrilldownSeries
+) => {
+  var obj = {};
+  // i -> go through each state
+  for (let i = 0; i < allData.length; i++) {
+    // j -> go through each commodity
+    for (let j = 0; j < 7; j++) {
+      commodityIds;
+      // grab the commodity y value for the state
+      obj = {
+        name: allData[i].name,
+        y: allData[i].exports.data[j].y,
+        color: "#F5B841",
+      };
+
+      // the array of the top10 states for that commodity
+      let top10 = structuredClone(exportDrilldownSeries[j].data);
+
+      // go through each value of the commodity array
+      for (let k = 0; k < top10.length; k++) {
+        // if that value is for the state you're on
+        if (top10[k].name == allData[i].name) {
+          top10[k].color = "#F5B841";
+        }
+      }
+
+      // if the array includes the state we're looking at
+      if (top10.some((value) => value.name == allData[i].name)) {
+        // add that array to the drilldown as is
+
+        let temp = {
+          name: commodityNames[j],
+          id: commodityIds[j],
+          data: top10,
+        };
+
+        allData[i].exportDrilldown.push(temp);
+      } else {
+        let array = [...top10, obj];
+
+        let temp = {
+          name: commodityNames[j],
+          id: commodityIds[j],
+          data: array,
+        };
+
+        allData[i].exportDrilldown.push(temp);
+      }
+    }
+  }
+
+  return allData;
+};
+
+export const addImportDrilldownSeriesToAllData = (
+  allData,
+  commodityIds,
+  commodityNames,
+  importDrilldownSeries
+) => {
+  var obj = {};
+  // i -> go through each state
+  for (let i = 0; i < allData.length; i++) {
+    // j -> go through each commodity
+    for (let j = 0; j < 7; j++) {
+      commodityIds;
+      // grab the commodity y value for the state
+      obj = {
+        name: allData[i].name,
+        y: allData[i].imports.data[j].y,
+        color: "#F5B841",
+      };
+
+      // the array of the top10 states for that commodity
+      let top10 = structuredClone(importDrilldownSeries[j].data);
+
+      // go through each value of the commodity array
+      for (let k = 0; k < top10.length; k++) {
+        // if that value is for the state you're on
+        if (top10[k].name == allData[i].name) {
+          top10[k].color = "#F5B841";
+        }
+      }
+
+      // if the array includes the state we're looking at
+      if (top10.some((value) => value.name == allData[i].name)) {
+        // add that array to the drilldown as is
+
+        let temp = {
+          name: commodityNames[j],
+          id: commodityIds[j],
+          data: top10,
+        };
+
+        allData[i].importDrilldown.push(temp);
+      } else {
+        let array = [...top10, obj];
+
+        let temp = {
+          name: commodityNames[j],
+          id: commodityIds[j],
+          data: array,
+        };
+
+        allData[i].importDrilldown.push(temp);
+      }
+    }
+  }
+
+  return allData;
+};
