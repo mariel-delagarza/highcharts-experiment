@@ -14,7 +14,7 @@ helpers.meow();
 let stateIndex = 44;
 /***********************************************************************/
 
-// font to make it look like Flourish
+// font to make it look like Flourish, colors
 Highcharts.setOptions({
   chart: {
     style: {
@@ -181,10 +181,10 @@ Highcharts.data({
 });
 
 //importExport must be capitalized Import or Export
-function renderChart(data, importExport, year, extremeFlag) {
+function renderChart(data, exportImport, year, extremeFlag) {
   console.log(data);
   // set title text, get correct series data and drilldown
-  if (importExport == "import") {
+  if (exportImport == "import") {
     var title = data.name + " Commodity Imports from Canada " + year;
     var seriesData = data.imports;
     var seriesDrilldown = data.importDrilldown;
@@ -276,13 +276,17 @@ function renderChart(data, importExport, year, extremeFlag) {
         let isDrilldown = this.point.options.isDrilldown;
 
         if (isDrilldown === "False") {
-          for (let i = 0; i < exportTooltipData.length; i++) {
-            let yFormatted = helpers.formatY(exportTooltipData[i].y);
-            output += helpers.newTooltipTable(
-              colors[i],
-              exportTooltipData[i].name,
-              yFormatted,
-              rankingValues[i]
+          if (exportImport == "export") {
+            output = helpers.exportTooltipTable(
+              colors,
+              exportTooltipData,
+              rankingValues
+            );
+          } else {
+            output = helpers.importTooltipTable(
+              colors,
+              importTooltipData,
+              rankingValues
             );
           }
         } else {
