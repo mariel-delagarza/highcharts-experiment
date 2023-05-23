@@ -1,3 +1,4 @@
+import * as helpers from "./modules/cat.js";
 /* -------------------------------------------------------------------------- */
 /*                             Set up data storage                            */
 /* -------------------------------------------------------------------------- */
@@ -6,31 +7,10 @@ let exportDataToSort = [];
 let importDataToSort = [];
 let extremeFlag;
 
+helpers.meow();
+
 // Texas data to test with -- will need to set stateIndex with which state is being hovered over
 let stateIndex = 44;
-
-const roundOffTo = (num, factor) => {
-  const quotient = num / 100000;
-  const res = Math.round(quotient) * factor;
-  return res;
-};
-function setExtremeMax(arr) {
-  var i = arr.length;
-  while (i--) {
-    if (arr[i] === 0) {
-      arr.splice(i, 1);
-    }
-  }
-
-  arr.sort(function (a, b) {
-    return a - b;
-  });
-
-  // add 100k to arr[1] in case it's small
-  let increasedMax = arr[1] + 100000;
-  let roundedMax = roundOffTo(increasedMax, 100000);
-  return roundedMax;
-}
 
 /*
 TODO: Make a dropdown that switches between data.imports, data.importDrilldown
@@ -92,142 +72,27 @@ Highcharts.data({
       for (let i = 1; i < columns.length; i++) {
         const row = columns[i];
         let stateName = row[0];
-        let coalExports = row[2];
-        let crudeOilExports = row[3];
-        let electricityExports = row[4];
-        let fuelEthanolExports = row[5];
-        let naturalGasExports = row[6];
-        let rppExports = row[7];
-        let uraniumExports = row[8];
-        let coalImports = row[9];
-        let crudeOilImports = row[10];
-        let electricityImports = row[11];
-        let fuelEthanolImports = row[12];
-        let naturalGasImports = row[13];
-        let rppImports = row[14];
-        let uraniumImports = row[15];
 
         let stateExportsArray = row.slice(2, 9);
         let stateImportsArray = row.slice(9, 16);
-        exportExtremeMax = setExtremeMax(stateExportsArray);
-        importExtremeMax = setExtremeMax(stateImportsArray);
+        exportExtremeMax = helpers.setExtremeMax(stateExportsArray);
+        importExtremeMax = helpers.setExtremeMax(stateImportsArray);
 
         // create what we need to get export rankings later
-        const obj1 = {
-          name: stateName,
-          data: row.slice(2, 9),
-        };
+        const obj1 = helpers.makeObj1(stateName, row);
         exportDataToSort.push(obj1);
 
         // create what we need to get import rankings later
-        const obj2 = {
-          name: stateName,
-          data: row.slice(9, 16),
-        };
+        const obj2 = helpers.makeObj2(stateName, row);
         importDataToSort.push(obj2);
 
         // create item that goes in final allData list
-        const obj3 = {
-          name: stateName,
-          imports: {
-            name: stateName,
-            extremeMax: importExtremeMax,
-            data: [
-              {
-                name: "Coal",
-                drilldown: "Coal Imports",
-                isDrilldown: "False",
-                y: coalImports,
-              },
-              {
-                name: "Crude Oil",
-                drilldown: "Crude Oil Imports",
-                isDrilldown: "False",
-                y: crudeOilImports,
-              },
-              {
-                name: "Electricity",
-                drilldown: "Electricity Imports",
-                isDrilldown: "False",
-                y: electricityImports,
-              },
-              {
-                name: "Fuel Ethanol",
-                drilldown: "Fuel Ethanol Imports",
-                isDrilldown: "False",
-                y: fuelEthanolImports,
-              },
-              {
-                name: "Natural Gas",
-                drilldown: "Natural Gas Imports",
-                isDrilldown: "False",
-                y: naturalGasImports,
-              },
-              {
-                name: "RPP",
-                drilldown: "RPP Imports",
-                isDrilldown: "False",
-                y: rppImports,
-              },
-              {
-                name: "Uranium",
-                drilldown: "Uranium Imports",
-                isDrilldown: "False",
-                y: uraniumImports,
-              },
-            ],
-          },
-          exports: {
-            name: stateName,
-            extremeMax: exportExtremeMax,
-            data: [
-              {
-                name: "Coal",
-                drilldown: "coal",
-                isDrilldown: "False",
-                y: coalExports,
-              },
-              {
-                name: "Crude Oil",
-                drilldown: "crudeOil",
-                isDrilldown: "False",
-                y: crudeOilExports,
-              },
-              {
-                name: "Electricity",
-                drilldown: "electricity",
-                isDrilldown: "False",
-                y: electricityExports,
-              },
-              {
-                name: "Fuel Ethanol",
-                drilldown: "fuelEthanol",
-                isDrilldown: "False",
-                y: fuelEthanolExports,
-              },
-              {
-                name: "Natural Gas",
-                drilldown: "naturalGas",
-                isDrilldown: "False",
-                y: naturalGasExports,
-              },
-              {
-                name: "RPP",
-                drilldown: "rpp",
-                isDrilldown: "False",
-                y: rppExports,
-              },
-              {
-                name: "Uranium",
-                drilldown: "uranium",
-                isDrilldown: "False",
-                y: uraniumExports,
-              },
-            ],
-          },
-          importDrilldown: [],
-          exportDrilldown: [],
-        };
+        const obj3 = helpers.makeObj3(
+          stateName,
+          row,
+          importExtremeMax,
+          exportExtremeMax
+        );
         allData.push(obj3);
       }
     }
@@ -271,38 +136,15 @@ Highcharts.data({
         let stateName = allData[i].name;
 
         // Add state's rank in each category to an array, add array to state's data
-        let exportRankingValues = [
-          exportStateRankings.coal.findIndex((x) => x.name === stateName) + 1,
-          exportStateRankings.crudeOil.findIndex((x) => x.name === stateName) +
-            1,
-          exportStateRankings.electricity.findIndex(
-            (x) => x.name === stateName
-          ) + 1,
-          exportStateRankings.fuelEthanol.findIndex(
-            (x) => x.name === stateName
-          ) + 1,
-          exportStateRankings.naturalGas.findIndex(
-            (x) => x.name === stateName
-          ) + 1,
-          exportStateRankings.rpp.findIndex((x) => x.name === stateName) + 1,
-          exportStateRankings.uranium.findIndex((x) => x.name === stateName) +
-            1,
-        ];
+        let exportRankingValues = helpers.makeExportRankingValues(
+          exportStateRankings,
+          stateName
+        );
 
-        let importRankingValues = [
-          importStateRankings.coal.findIndex((x) => x.name === stateName) + 1,
-          importStateRankings.crudeOil.findIndex((x) => x.name === stateName) +
-            1,
-          importStateRankings.electricity.findIndex(
-            (x) => x.name === stateName
-          ) + 1,
-          importStateRankings.fuelEthanol.findIndex(
-            (x) => x.name === stateName
-          ) + 1,
-          importStateRankings.rpp.findIndex((x) => x.name === stateName) + 1,
-          importStateRankings.uranium.findIndex((x) => x.name === stateName) +
-            1,
-        ];
+        let importRankingValues = helpers.makeImportRankingvalues(
+          importStateRankings,
+          stateName
+        );
 
         Object.assign(
           (allData[i].exports["rankingValues"] = exportRankingValues)
@@ -437,7 +279,7 @@ function renderChart(data, importExport, year, extremeFlag) {
     var title = data.name + " Commodity Imports from Canada " + year;
     var seriesData = data.imports;
     var seriesDrilldown = data.importDrilldown;
-    var importTooltipData = data.imports.data
+    var importTooltipData = data.imports.data;
 
     if (extremeFlag == false) {
       var extremeMax = data.imports.extremeMax;
