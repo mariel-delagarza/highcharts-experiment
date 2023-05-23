@@ -220,6 +220,9 @@ function renderChart(data, importExport, year, extremeFlag) {
         load: function (event) {
           this.yAxis[0].setExtremes(0, extremeMax);
         },
+        drilldown: function (e) {
+          console.log("drilldown");
+        },
       },
     },
     title: {
@@ -253,18 +256,10 @@ function renderChart(data, importExport, year, extremeFlag) {
         text: "US Dollars",
       },
       lineWidth: 1,
-      //endOnTick: false,
+      endOnTick: true,
       labels: {
         formatter: function () {
-          if (this.value >= 1000000000) {
-            return "$" + this.value / 1000000000 + "B";
-          } else if (this.value >= 1000000) {
-            return "$" + this.value / 1000000 + "M";
-          } else if (this.value >= 1000) {
-            return "$" + this.value / 1000 + "K";
-          } else {
-            return "$" + this.value;
-          }
+          return helpers.labelMaker(this.value);
         },
       },
     },
@@ -276,60 +271,36 @@ function renderChart(data, importExport, year, extremeFlag) {
       formatter: function () {
         let output = "";
         let colors = Highcharts.defaultOptions.colors;
-
-        const formatY = (yValue) => {
-          console.log(this.point.x);
-          let y = "";
-          if (yValue >= 1000000000) {
-            y = "$" + parseFloat((yValue / 1000000000).toFixed(2)) + "B";
-            return y;
-          } else if (yValue >= 1000000) {
-            y = "$" + parseFloat((yValue / 1000000).toFixed(2)) + "M";
-            return y;
-          } else if (yValue >= 1000) {
-            y = "$" + parseFloat((yValue / 1000).toFixed(2)) + "K";
-            return y;
-          } else {
-            y = "$" + yValue;
-            return y;
-          }
-        };
         let drilldownData = this.series.userOptions.data;
         let rankingValues = this.series.userOptions.rankingValues;
-        let index = this.point.index;
         let isDrilldown = this.point.options.isDrilldown;
 
         if (isDrilldown === "False") {
           for (let i = 0; i < exportTooltipData.length; i++) {
-            let yFormatted = formatY(exportTooltipData[i].y);
-            console.log(exportTooltipData[i].name, exportTooltipData[i].y);
-            if (i == exportTooltipData.length - 1) {
-              output += `<tr><td><span style="color:${colors[i]}">\u25CF </span> ${exportTooltipData[i].name}: </td><td>${yFormatted}</td></tr><tr><td><span style="color:${colors[i]}">\u25CF </span> Rank: </td><td>${rankingValues[i]}</td></tr><tr><td colspan="2"></td></tr>`;
-            } else {
-              output += `<tr><td><span style="color:${colors[i]}">\u25CF </span> ${exportTooltipData[i].name}: </td><td>${yFormatted}</td></tr><tr><td><span style="color:${colors[i]}">\u25CF </span> Rank: </td><td>${rankingValues[i]}</td></tr><tr><td colspan="2" style="border-bottom: 2px solid; border-bottom-color: #808080"></td></tr>`;
-            }
+            let yFormatted = helpers.formatY(exportTooltipData[i].y);
+            output += helpers.newTooltipTable(
+              colors[i],
+              exportTooltipData[i].name,
+              yFormatted,
+              rankingValues[i]
+            );
           }
         } else {
-          let drillDownID = this.series.userOptions.id;
-          console.log(drillDownID);
-          let drilldownIndex = seriesData.data.findIndex(
-            (x) => x.drilldown === drillDownID
-          );
-          console.log(drilldownIndex);
-          console.log(seriesData);
-          let ranking;
+          for (let i = 0; i < drilldownData.length; i++) {
+            let yFormatted = helpers.formatY(drilldownData[i].y);
 
-          let yFormatted = formatY(this.point.y);
-
-          if (drilldownData[index].name == data.name) {
-            ranking = seriesData.rankingValues[drilldownIndex];
-          } else {
-            ranking = index + 1;
+            output += helpers.drilldownTooltipTable(
+              i + 1,
+              drilldownData[i].color,
+              drilldownData[i].name,
+              yFormatted
+            );
           }
-          return `<b>${this.point.name}</b><br><br><span>Export Total: ${yFormatted}</span><br><span>Ranking: ${ranking}</span>`;
+
+          return `<table><tr><th>Rank</th><th>State</th><th>Total</th></tr>${output}</table>`;
         }
 
-        return `<table>${output}</table>`;
+        return `<table><tr><th>Commodity</th><th>Rank</th><th>Total</th><tr><td colspan="3" height="1px" style="border-bottom: 1px solid; border-bottom-color: #808080"></td></tr></tr>${output}</table>`;
       },
     },
     plotOptions: {

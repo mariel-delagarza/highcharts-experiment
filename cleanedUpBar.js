@@ -20,7 +20,7 @@ export const makeCommodityNames = (commodityColumnHeadings) => {
     processedCommodity[0] = word;
 
     let final = processedCommodity.join(" ");
-    console.log(final);
+    //console.log(final);
     commodityNames.push(final);
   });
 };

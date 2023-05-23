@@ -2,6 +2,9 @@ export const meow = () => {
   console.log("meow");
 };
 
+export const test = (value) => {
+  console.log(value);
+};
 /* -------------------------------------------------------------------------- */
 /*                              make commodityIds                             */
 /* -------------------------------------------------------------------------- */
@@ -422,4 +425,58 @@ export const addImportDrilldownSeriesToAllData = (
   }
 
   return allData;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                               label formatter                              */
+/* -------------------------------------------------------------------------- */
+
+export const labelMaker = (value) => {
+  if (value >= 1000000000) {
+    return "$" + value / 1000000000 + "B";
+  } else if (value >= 1000000) {
+    return "$" + value / 1000000 + "M";
+  } else if (value >= 1000) {
+    return "$" + value / 1000 + "K";
+  } else {
+    return "$" + value;
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/*                              tooltipFormatters                             */
+/* -------------------------------------------------------------------------- */
+
+/* ------------------------------- yFormatter ------------------------------- */
+export const formatY = (yValue) => {
+  let y = "";
+  if (yValue >= 1000000000) {
+    y = "$" + parseFloat((yValue / 1000000000).toFixed(2)) + "B";
+    return y;
+  } else if (yValue >= 1000000) {
+    y = "$" + parseFloat((yValue / 1000000).toFixed(2)) + "M";
+    return y;
+  } else if (yValue >= 1000) {
+    y = "$" + parseFloat((yValue / 1000).toFixed(2)) + "K";
+    return y;
+  } else {
+    y = "$" + yValue;
+    return y;
+  }
+};
+
+export const tooltipTableBottomRow = (color, name, yValue, rank) => {
+  return `<tr><td><span style="color:${color}">\u25CF </span> ${name}: </td><td>${yValue}</td></tr><tr><td><span style="color:${color}">\u25CF </span> Rank: </td><td>${rank}</td></tr><tr><td colspan="2"></td></tr>`;
+};
+
+export const tooltipTable = (color, name, yValue, rank) => {
+  return `<tr><td><span style="color:${color}">\u25CF </span> ${name}: </td><td>${yValue}</td></tr><tr><td><span style="color:${color}">\u25CF </span> Rank: </td><td>${rank}</td></tr><tr><td colspan="2" style="border-bottom: 2px solid; border-bottom-color: #808080"></td></tr>`;
+};
+
+export const drilldownTooltipTable = (rank, color, name, yValue) => {
+  return `<tr><td>${rank}</td><td style="color:${color}; font-weight: bold;">${name}</td><td>${yValue}</td></tr>`;
+};
+
+export const newTooltipTable = (color, commodity, yValue, rank) => {
+  return `<tr><td style="color:${color}; font-weight: bold;">${commodity}</td><td>${rank}</td><td>${yValue}</td></tr>`;
 };
