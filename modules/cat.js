@@ -465,50 +465,61 @@ export const formatY = (yValue) => {
   }
 };
 
-export const drilldownTooltipTable = (rank, color, name, yValue) => {
+export const drilldownTooltipTableRow = (rank, color, name, yValue) => {
   return `<tr><td>${rank}</td><td style="color:${color}; font-weight: bold;">${name}</td><td>${yValue}</td></tr>`;
 };
 
-export const tooltipTable = (color, commodity, yValue, rank) => {
+export const drilldownTooltipTable = (drilldownData) => {
+  let output = "";
+
+  for (let i = 0; i < drilldownData.length; i++) {
+    let yFormatted = formatY(drilldownData[i].y);
+
+    output += drilldownTooltipTableRow(
+      i + 1,
+      drilldownData[i].color,
+      drilldownData[i].name,
+      yFormatted
+    );
+  }
+
+  return `<table><tr><th>Rank</th><th>State</th><th>Total</th></tr>${output}</table>`;
+};
+
+export const tooltipTableRow = (color, commodity, yValue, rank) => {
   return `<tr><td style="color:${color}; font-weight: bold;">${commodity}</td><td>${rank}</td><td>${yValue}</td></tr>`;
 };
 
-export const exportTooltipTable = (
+export const tooltipTable = (
+  exportImport,
   colors,
   exportTooltipData,
-  rankingValues
-) => {
-  let output = "";
-
-  for (let i = 0; i < exportTooltipData.length; i++) {
-    let yFormatted = formatY(exportTooltipData[i].y);
-    output += tooltipTable(
-      colors[i],
-      exportTooltipData[i].name,
-      yFormatted,
-      rankingValues[i]
-    );
-  }
-  console.log("exportTooltipTable");
-  return output;
-};
-
-export const importTooltipTable = (
-  colors,
   importTooltipData,
   rankingValues
 ) => {
   let output = "";
 
-  for (let i = 0; i < importTooltipData.length; i++) {
-    let yFormatted = formatY(importTooltipData[i].y);
-    output += tooltipTable(
-      colors[i],
-      importTooltipData[i].name,
-      yFormatted,
-      rankingValues[i]
-    );
+  if (exportImport == "export") {
+    for (let i = 0; i < exportTooltipData.length; i++) {
+      let yFormatted = formatY(exportTooltipData[i].y);
+      output += tooltipTableRow(
+        colors[i],
+        exportTooltipData[i].name,
+        yFormatted,
+        rankingValues[i]
+      );
+    }
+  } else {
+    for (let i = 0; i < importTooltipData.length; i++) {
+      let yFormatted = formatY(importTooltipData[i].y);
+      output += tooltipTableRow(
+        colors[i],
+        importTooltipData[i].name,
+        yFormatted,
+        rankingValues[i]
+      );
+    }
   }
-  console.log("importTooltipTable");
-  return output;
+
+  return `<table><tr><th>Commodity</th><th>Rank</th><th>Total</th><tr><td colspan="3" height="1px" style="border-bottom: 1px solid; border-bottom-color: #808080"></td></tr></tr>${output}</table>`;
 };

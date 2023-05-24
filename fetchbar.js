@@ -269,42 +269,22 @@ function renderChart(data, exportImport, year, extremeFlag) {
       borderColor: "#333",
       backgroundColor: "#fff",
       formatter: function () {
-        let output = "";
         let colors = Highcharts.defaultOptions.colors;
         let drilldownData = this.series.userOptions.data;
         let rankingValues = this.series.userOptions.rankingValues;
         let isDrilldown = this.point.options.isDrilldown;
 
         if (isDrilldown === "False") {
-          if (exportImport == "export") {
-            output = helpers.exportTooltipTable(
-              colors,
-              exportTooltipData,
-              rankingValues
-            );
-          } else {
-            output = helpers.importTooltipTable(
-              colors,
-              importTooltipData,
-              rankingValues
-            );
-          }
+          return helpers.tooltipTable(
+            exportImport,
+            colors,
+            exportTooltipData,
+            importTooltipData,
+            rankingValues
+          );
         } else {
-          for (let i = 0; i < drilldownData.length; i++) {
-            let yFormatted = helpers.formatY(drilldownData[i].y);
-
-            output += helpers.drilldownTooltipTable(
-              i + 1,
-              drilldownData[i].color,
-              drilldownData[i].name,
-              yFormatted
-            );
-          }
-
-          return `<table><tr><th>Rank</th><th>State</th><th>Total</th></tr>${output}</table>`;
+          return helpers.drilldownTooltipTable(drilldownData);
         }
-
-        return `<table><tr><th>Commodity</th><th>Rank</th><th>Total</th><tr><td colspan="3" height="1px" style="border-bottom: 1px solid; border-bottom-color: #808080"></td></tr></tr>${output}</table>`;
       },
     },
     plotOptions: {
