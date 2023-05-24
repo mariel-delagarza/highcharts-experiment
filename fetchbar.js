@@ -223,8 +223,11 @@ function renderChart(data, exportImport, year, extremeFlag) {
         load: function (event) {
           this.yAxis[0].setExtremes(0, extremeMax);
         },
-        drilldown: function (e) {
-          console.log("drilldown");
+        drilldown: function (event) {
+          displayZoomAndDropdown("none");
+        },
+        drillup: function (event) {
+          displayZoomAndDropdown("");
         },
       },
     },
@@ -307,23 +310,34 @@ function renderChart(data, exportImport, year, extremeFlag) {
   });
 }
 
-document.getElementById("reset").addEventListener("click", function () {
+var zoomOutButton = document.getElementById("reset");
+var zoomInButton = document.getElementById("zoom");
+var dropdown = document.getElementById("dropdown");
+var dropdownLabel = document.getElementById("dropdown-label");
+
+zoomOutButton.addEventListener("click", function () {
   let chart = Highcharts.chart("container", {});
   chart.destroy();
-  renderChart(allData[44], exportImport, year, true);
+  renderChart(allData[stateIndex], exportImport, year, true);
 });
 
-document.getElementById("zoom").addEventListener("click", function () {
+zoomInButton.addEventListener("click", function () {
   let chart = Highcharts.chart("container", {});
   chart.destroy();
-  renderChart(allData[44], exportImport, year, false);
+  renderChart(allData[stateIndex], exportImport, year, false);
 });
 
-const select = document.getElementById("dropdown");
-select.addEventListener("change", function () {
+dropdown.addEventListener("change", function () {
   let chart = Highcharts.chart("container", {});
   exportImport = this.value;
   console.log("dropdown");
   chart.destroy();
-  renderChart(allData[44], exportImport, year, false);
+  renderChart(allData[stateIndex], exportImport, year, false);
 });
+
+const displayZoomAndDropdown = (display) => {
+  zoomInButton.style.display = display;
+  zoomOutButton.style.display = display;
+  dropdown.style.display = display;
+  dropdownLabel.style.display = display;
+};
