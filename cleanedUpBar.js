@@ -1,28 +1,27 @@
-let commodityColumnHeadings = [
-  "coalExports",
-  "crudeOilExports",
-  "electricityExports",
-  "fuelEthanolExports",
-  "naturalGasExports",
-  "rppExports",
-  "uraniumExports",
-];
+let arr = [29218687, 4282060548, 34297, 0, 0, 876221045, 18807432];
 
-export const makeCommodityNames = (commodityColumnHeadings) => {
-  let commodityNames = [];
-
-  commodityColumnHeadings.forEach((element) => {
-    // process ID to get formatted name for Names list
-    let processedCommodity = element.slice(0, -7).split(/(?=[A-Z])/);
-    let word =
-      processedCommodity[0].charAt(0).toUpperCase() +
-      processedCommodity[0].slice(1);
-    processedCommodity[0] = word;
-
-    let final = processedCommodity.join(" ");
-    //console.log(final);
-    commodityNames.push(final);
-  });
+const roundOffTo = (num, factor) => {
+  const quotient = num / 100000;
+  const res = Math.round(quotient) * factor;
+  return res;
 };
 
-makeCommodityNames(commodityColumnHeadings);
+const setExtremeMax = (arr) => {
+  var i = arr.length;
+  while (i--) {
+    if (arr[i] === 0) {
+      arr.splice(i, 1);
+    }
+  }
+
+  arr.sort(function (a, b) {
+    return a - b;
+  });
+
+  console.log("sorted", arr);
+  console.log(arr[0]);
+  // add 100k to arr[1] in case it's small
+  let increasedMax = arr[0] + 100000;
+  let roundedMax = roundOffTo(increasedMax, 100000);
+  return roundedMax;
+};

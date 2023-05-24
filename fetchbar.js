@@ -11,7 +11,7 @@ let year = 2020;
 helpers.meow();
 
 /******STATE INDEX needs to come from map/state we're hovering over******/
-let stateIndex = 44;
+let stateIndex = 26;
 /***********************************************************************/
 
 // font to make it look like Flourish, colors
@@ -43,6 +43,7 @@ Highcharts.data({
   parsed: function parsed(columns) {
     /* ------------------ make lists of commodity IDs, names ---------------- */
     let commodityColumnHeadings = columns[0].slice(2, 9);
+
     let commodityIds = helpers.makeCommodityIds(commodityColumnHeadings);
     let commodityNames = helpers.makeCommodityNames(commodityColumnHeadings);
     let exportExtremeMax;
@@ -99,10 +100,13 @@ Highcharts.data({
 
         /* process imports*/
         let importDataToSortCopy = JSON.parse(JSON.stringify(importDataToSort));
+
         let importRankingValues = importDataToSortCopy.sort(
           (a, b) => a.data[i] - b.data[i]
         );
+        //console.log("importrankingvalues", importRankingValues);
         let importReverse = importRankingValues.reverse();
+        //console.log("importreverse", importReverse);
         Object.assign((importStateRankings[commodityIds[i]] = importReverse));
 
         importDataToSortCopy = "";
@@ -122,7 +126,6 @@ Highcharts.data({
           exportStateRankings,
           stateName
         );
-
         let importRankingValues = helpers.makeImportRankingvalues(
           importStateRankings,
           stateName
@@ -320,6 +323,7 @@ const select = document.getElementById("dropdown");
 select.addEventListener("change", function () {
   let chart = Highcharts.chart("container", {});
   exportImport = this.value;
+  console.log("dropdown");
   chart.destroy();
   renderChart(allData[44], exportImport, year, false);
 });

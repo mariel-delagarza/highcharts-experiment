@@ -57,8 +57,8 @@ export const setExtremeMax = (arr) => {
     return a - b;
   });
 
-  // add 100k to arr[1] in case it's small
-  let increasedMax = arr[1] + 100000;
+  // add 100k to arr[0] in case it's small
+  let increasedMax = arr[0] + 100000;
   let roundedMax = roundOffTo(increasedMax, 100000);
   return roundedMax;
 };
@@ -77,6 +77,7 @@ export const makeObj1 = (stateName, row) => {
   return obj1;
 };
 
+// create what we need to get import rankings later
 export const makeObj2 = (stateName, row) => {
   const obj2 = {
     name: stateName,
@@ -240,6 +241,7 @@ export const makeImportRankingvalues = (importStateRankings, stateName) => {
     importStateRankings.crudeOil.findIndex((x) => x.name === stateName) + 1,
     importStateRankings.electricity.findIndex((x) => x.name === stateName) + 1,
     importStateRankings.fuelEthanol.findIndex((x) => x.name === stateName) + 1,
+    importStateRankings.naturalGas.findIndex((x) => x.name === stateName) + 1,
     importStateRankings.rpp.findIndex((x) => x.name === stateName) + 1,
     importStateRankings.uranium.findIndex((x) => x.name === stateName) + 1,
   ];
