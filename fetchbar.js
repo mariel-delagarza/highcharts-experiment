@@ -199,7 +199,7 @@ function renderChart(data, exportImport, year, extremeFlag) {
       var extremeMax = null;
     }
   } else {
-    var title = data.name + " Commodity Exports Canada " + year;
+    var title = data.name + " Commodity Exports to Canada " + year;
     var seriesData = data.exports;
     var seriesDrilldown = data.exportDrilldown;
     var exportTooltipData = data.exports.data;
@@ -234,12 +234,18 @@ function renderChart(data, exportImport, year, extremeFlag) {
     title: {
       text: title,
       align: "left",
+      style: {
+        fontSize: "1.5rem",
+      },
+    },
+    subtitle: {
+      text: "Click on a commodity name to view the top 10 states in that category and see how this state compares.",
+      align: "left",
+      style: {
+        fontSize: "1.2rem",
+      },
     },
     exporting: { enabled: false },
-    subtitle: {
-      text: "SUBTITLE GOES HERE",
-      align: "left",
-    },
     credits: {
       enabled: false,
       text: "CSIS Energy Security Project",
@@ -253,6 +259,10 @@ function renderChart(data, exportImport, year, extremeFlag) {
       lineColor: "#eeeeee",
       labels: {
         overflow: "justify",
+        style: {
+          fontSize: "1rem",
+          color: "#aaa",
+        },
       },
     },
     yAxis: {
@@ -260,12 +270,20 @@ function renderChart(data, exportImport, year, extremeFlag) {
       lineColor: "#eeeeee",
       title: {
         text: "US Dollars",
+        style: {
+          fontSize: ".75rem",
+          color: "#aaa",
+        },
       },
       lineWidth: 1,
       endOnTick: true,
       labels: {
         formatter: function () {
           return helpers.labelMaker(this.value);
+        },
+        style: {
+          fontSize: ".75rem",
+          color: "#aaa",
         },
       },
     },
@@ -300,9 +318,18 @@ function renderChart(data, exportImport, year, extremeFlag) {
     },
     series: [seriesData],
     drilldown: {
+      activeAxisLabelStyle: {
+        color: "#2886b2",
+      },
       breadcrumbs: {
-        position: {
-          align: "left",
+        buttonTheme: {
+          style: {
+            color: "#2886b2",
+            fontSize: "1rem",
+          },
+        },
+        style: {
+          fontSize: "1rem",
         },
       },
       series: seriesDrilldown,
@@ -317,12 +344,20 @@ var dropdownLabel = document.getElementById("dropdown-label");
 
 zoomOutButton.addEventListener("click", function () {
   let chart = Highcharts.chart("container", {});
+  zoomOutButton.classList.remove("inactive");
+  zoomOutButton.classList.add("active");
+  zoomInButton.classList.remove("active");
+  zoomInButton.classList.add("inactive");
   chart.destroy();
   renderChart(allData[stateIndex], exportImport, year, true);
 });
 
 zoomInButton.addEventListener("click", function () {
   let chart = Highcharts.chart("container", {});
+  zoomInButton.classList.remove("inactive");
+  zoomInButton.classList.add("active");
+  zoomOutButton.classList.remove("active");
+  zoomOutButton.classList.add("inactive");
   chart.destroy();
   renderChart(allData[stateIndex], exportImport, year, false);
 });

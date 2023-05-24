@@ -18,24 +18,35 @@
         background-color: green;
       }
     </style>
+    <link rel="stylesheet" type="text/css" href="./bubbles.css" />
   </head>
 
   <body>
-    <!-- Highcharts chart container -->
-    <input id="reset" type="button" value="Zoom Out" />
-    <input id="zoom" type="button" value="Zoom In" />
-    <div id="inputContainer">
-      <div class="dropdown">
-        <label for="dropdown" id="dropdown-label"
-          >Select exports or imports:</label
-        >
-        <select id="dropdown">
-          <option value="export">Exports</option>
-          <option value="import">Imports</option>
-        </select>
+    <main>
+      <div class="cards">
+        <!----------------------------------------- card 1 ----------------------------------------->
+        <div class="card">
+          <div class="dropdown">
+            <label for="dropdown" id="dropdown-label"
+              >Select exports or imports:</label
+            >
+            <select id="dropdown">
+              <option value="export">Exports</option>
+              <option value="import">Imports</option>
+            </select>
+          </div>
+          <button class="button active" id="zoom" type="button">Zoom In</button>
+          <button class="button inactive" id="reset" type="button">
+            Zoom Out
+          </button>
+        </div>
+        <!----------------------------------------- card 2 ----------------------------------------->
+        <div class="card">
+          <div id="container"></div>
+        </div>
       </div>
-    </div>
-    <div id="container"></div>
+    </main>
+
     <!-- Include jQuery & Highcharts Libraries; Adjust per project -->
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <!-- <script src="http://code.highcharts.com/stock/highstock.js"></script> -->
